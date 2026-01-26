@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* MetalCalc Pro - Industrial Design System */
+
+@layer base {
+  :root {
+    /* MetalCalc Pro - Orange/Cream Industrial Theme */
+    --background: 24 85% 52%;
+    --foreground: 30 10% 15%;
+
+    --card: 45 40% 90%;
+    --card-foreground: 30 10% 15%;
+
+    --popover: 45 40% 88%;
+    --popover-foreground: 30 10% 15%;
+
+    /* Orange accent - primary brand color */
+    --primary: 24 85% 52%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 45 35% 85%;
+    --secondary-foreground: 30 10% 15%;
+
+    --muted: 45 30% 80%;
+    --muted-foreground: 30 10% 40%;
+
+    --accent: 180 45% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 30 20% 30%;
+    --input: 45 40% 88%;
+    --ring: 24 85% 52%;
+
+    --radius: 0.5rem;
+
+    /* Custom tokens for MetalCalc */
+    --steel: 210 10% 40%;
+    --steel-light: 210 10% 60%;
+    --success: 142 76% 36%;
+    --info: 180 45% 45%;
+    --cream: 45 40% 90%;
+    --cream-dark: 45 35% 85%;
+    
+    /* Shadows */
+    --shadow-card: 0 2px 8px hsl(0 0% 0% / 0.15);
+    --shadow-button: 0 4px 12px hsl(0 0% 0% / 0.2);
+  }
+
+  .dark {
+    --background: 24 85% 52%;
+    --foreground: 30 10% 15%;
+    --card: 45 40% 90%;
+    --card-foreground: 30 10% 15%;
+    --popover: 45 40% 88%;
+    --popover-foreground: 30 10% 15%;
+    --primary: 24 85% 52%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 45 35% 85%;
+    --secondary-foreground: 30 10% 15%;
+    --muted: 45 30% 80%;
+    --muted-foreground: 30 10% 40%;
+    --accent: 180 45% 45%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 30 20% 30%;
+    --input: 45 40% 88%;
+    --ring: 24 85% 52%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  
+  /* Custom scrollbar for industrial feel */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary));
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  
+  .shadow-button {
+    box-shadow: var(--shadow-button);
+  }
+  
+  .bg-cream {
+    background-color: hsl(var(--cream));
+  }
+  
+  .bg-cream-dark {
+    background-color: hsl(var(--cream-dark));
+  }
+}
