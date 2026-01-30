@@ -123,7 +123,7 @@ export const gerarPDF = (
   });
   
   // Posição após a tabela
-  const finalY = (doc as any).lastAutoTable.finalY + 10;
+  const finalY = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
   
   // Totais
   const pesoTotal = projetos.reduce((acc, p) => acc + p.resultado.pesoTotal, 0);
