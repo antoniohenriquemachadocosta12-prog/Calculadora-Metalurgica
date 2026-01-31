@@ -19,35 +19,38 @@ export const EmpresaModal: React.FC<EmpresaModalProps> = ({
   onClose
 }) => {
   return (
-    <div 
-      className="fixed inset-0 bg-foreground/50 flex items-center justify-center z-50 p-4"
+    <div
+      className="fixed inset-0 bg-navy/60 flex items-center justify-center z-50 p-4"
       onClick={onClose}
     >
-      <div 
-        className="bg-card rounded-lg w-full max-w-md overflow-hidden border-2 border-border"
+      <div
+        className="bg-cream rounded-lg w-full max-w-md overflow-hidden"
+        style={{ border: '3px solid hsl(210 45% 25%)' }}
         onClick={e => e.stopPropagation()}
       >
-        <div className="bg-cream p-4 border-b-2 border-border">
-          <h3 className="text-foreground font-bold text-lg">Dados do Orçamento</h3>
-          <p className="text-muted-foreground text-sm">Preencha para gerar o PDF</p>
+        {/* Header */}
+        <div className="p-4" style={{ borderBottom: '2px solid hsl(210 45% 25%)' }}>
+          <h3 className="text-navy font-bold text-lg">Dados do Orçamento</h3>
+          <p className="text-navy/60 text-sm">Preencha para gerar o PDF</p>
         </div>
 
-        <div className="p-4 bg-cream space-y-4 max-h-[60vh] overflow-y-auto">
+        {/* Form */}
+        <div className="p-4 space-y-4 max-h-[60vh] overflow-y-auto">
           {/* Empresa */}
           <div>
-            <h4 className="text-foreground font-semibold text-sm mb-2">📋 Dados da Empresa</h4>
+            <h4 className="text-navy font-semibold text-sm mb-2">Dados da Empresa</h4>
             <div className="space-y-2">
               <input
                 type="text"
                 placeholder="Nome da Empresa"
-                className="w-full bg-cream-dark border-2 border-border rounded px-3 py-2 text-foreground text-sm outline-none focus:border-primary"
+                className="input-field w-full"
                 value={empresa.nome}
                 onChange={(e) => onEmpresaChange({ ...empresa, nome: e.target.value })}
               />
               <input
                 type="text"
                 placeholder="CNPJ"
-                className="w-full bg-cream-dark border-2 border-border rounded px-3 py-2 text-foreground text-sm outline-none focus:border-primary"
+                className="input-field w-full"
                 value={empresa.cnpj}
                 onChange={(e) => onEmpresaChange({ ...empresa, cnpj: e.target.value })}
               />
@@ -56,26 +59,26 @@ export const EmpresaModal: React.FC<EmpresaModalProps> = ({
 
           {/* Cliente */}
           <div>
-            <h4 className="text-foreground font-semibold text-sm mb-2">👤 Dados do Cliente</h4>
+            <h4 className="text-navy font-semibold text-sm mb-2">Dados do Cliente</h4>
             <div className="space-y-2">
               <input
                 type="text"
                 placeholder="Nome do Cliente"
-                className="w-full bg-cream-dark border-2 border-border rounded px-3 py-2 text-foreground text-sm outline-none focus:border-primary"
+                className="input-field w-full"
                 value={cliente.nome}
                 onChange={(e) => onClienteChange({ ...cliente, nome: e.target.value })}
               />
               <input
                 type="tel"
                 placeholder="Telefone"
-                className="w-full bg-cream-dark border-2 border-border rounded px-3 py-2 text-foreground text-sm outline-none focus:border-primary"
+                className="input-field w-full"
                 value={cliente.telefone}
                 onChange={(e) => onClienteChange({ ...cliente, telefone: e.target.value })}
               />
               <textarea
                 placeholder="Observações"
                 rows={2}
-                className="w-full bg-cream-dark border-2 border-border rounded px-3 py-2 text-foreground text-sm outline-none focus:border-primary resize-none"
+                className="input-field w-full resize-none"
                 value={cliente.obs}
                 onChange={(e) => onClienteChange({ ...cliente, obs: e.target.value })}
               />
@@ -83,18 +86,21 @@ export const EmpresaModal: React.FC<EmpresaModalProps> = ({
           </div>
         </div>
 
-        <div className="p-4 bg-cream-dark border-t-2 border-border flex gap-3">
+        {/* Buttons */}
+        <div className="p-4 flex gap-3" style={{ borderTop: '2px solid hsl(210 45% 25%)' }}>
           <button
             onClick={onClose}
-            className="flex-1 bg-muted border-2 border-border text-foreground py-3 rounded font-semibold hover:bg-muted/80 transition-colors"
+            className="btn-orange flex-1"
           >
             Cancelar
           </button>
           <button
             onClick={onConfirm}
-            className="flex-1 bg-accent text-accent-foreground py-3 rounded font-semibold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+            className="btn-teal flex-1 flex items-center justify-center gap-2"
           >
-            <span>📄</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2ZM16 18H8V16H16V18ZM16 14H8V12H16V14ZM13 9V3.5L18.5 9H13Z" />
+            </svg>
             Gerar PDF
           </button>
         </div>

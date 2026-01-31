@@ -1,5 +1,6 @@
 import React from 'react';
 import { Projeto } from '@/types/projeto';
+import { Logo } from './Logo';
 
 interface ProjectListProps {
   projetos: Projeto[];
@@ -12,102 +13,120 @@ export const ProjectList: React.FC<ProjectListProps> = ({ projetos, onBack, onDe
   const pesoTotal = projetos.reduce((acc, p) => acc + p.resultado.pesoTotal, 0);
 
   return (
-    <div className="min-h-screen bg-primary pb-24">
+    <div className="app-container pb-24">
       {/* Main Content Card */}
-      <div className="mx-3 mt-3 bg-card rounded-lg border-2 border-border overflow-hidden">
-        {/* Table Header */}
-        <div className="bg-muted border-b-2 border-border">
-          <div className="grid grid-cols-12 text-xs font-semibold text-muted-foreground">
-            <div className="col-span-1 p-2 border-r border-border text-center">Item</div>
-            <div className="col-span-2 p-2 border-r border-border text-center">Quant.</div>
-            <div className="col-span-2 p-2 border-r border-border text-center">Und.</div>
-            <div className="col-span-5 p-2 border-r border-border text-center">Peso</div>
-            <div className="col-span-2 p-2 text-center">Ações</div>
-          </div>
-        </div>
+      <div className="content-card">
+        {/* Table */}
+        <div className="bg-cream">
+          {/* Table Header */}
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th className="w-12">Item</th>
+                <th className="w-16">Quant.</th>
+                <th className="w-12">Und.</th>
+                <th>Peso</th>
+                <th className="w-16"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {projetos.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="p-8 text-center">
+                    <div className="text-navy/50">
+                      <svg className="w-12 h-12 mx-auto mb-2 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                      </svg>
+                      <p className="text-sm font-medium">Lista vazia</p>
+                      <p className="text-xs mt-1">Adicione perfis para gerar orçamento</p>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                projetos.map((projeto, index) => (
+                  <tr key={projeto.id}>
+                    <td className="font-medium">{index + 1}</td>
+                    <td>{projeto.quantidade}</td>
+                    <td>Pç</td>
+                    <td className="font-semibold">{projeto.resultado.pesoTotal.toFixed(2)} Kg</td>
+                    <td>
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          className="text-navy hover:text-primary transition-colors"
+                          title="Editar"
+                        >
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                          </svg>
+                        </button>
+                        <button
+                          className="text-destructive hover:text-destructive/70 transition-colors"
+                          onClick={() => onDelete(projeto.id)}
+                          title="Excluir"
+                        >
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <polyline points="3,6 5,6 21,6" />
+                            <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
+                          </svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
 
-        {/* Table Body */}
-        <div className="bg-cream max-h-[calc(100vh-280px)] overflow-y-auto">
-          {projetos.length === 0 ? (
-            <div className="p-8 text-center text-muted-foreground">
-              <span className="text-4xl block mb-2">📋</span>
-              <p className="text-sm">Lista vazia</p>
-              <p className="text-xs">Adicione perfis para gerar orçamento</p>
-            </div>
-          ) : (
-            projetos.map((projeto, index) => (
-              <div key={projeto.id} className="grid grid-cols-12 text-sm border-b border-border last:border-b-0">
-                <div className="col-span-1 p-2 border-r border-border text-center text-foreground">{index + 1}</div>
-                <div className="col-span-2 p-2 border-r border-border text-center text-foreground">{projeto.quantidade}</div>
-                <div className="col-span-2 p-2 border-r border-border text-center text-foreground">Pç</div>
-                <div className="col-span-5 p-2 border-r border-border text-center text-foreground font-medium">
-                  {projeto.resultado.pesoTotal.toFixed(2)} Kg
-                </div>
-                <div className="col-span-2 p-2 flex items-center justify-center gap-1">
-                  <button 
-                    className="text-foreground hover:text-primary text-sm"
-                    title="Ver detalhes"
-                  >
-                    ✏️
-                  </button>
-                  <button 
-                    className="text-destructive hover:text-destructive/80 text-sm"
-                    onClick={() => onDelete(projeto.id)}
-                    title="Excluir"
-                  >
-                    🗑️
-                  </button>
-                </div>
+          {/* Footer */}
+          <div className="p-3" style={{ borderTop: '2px solid hsl(210 45% 25%)' }}>
+            {/* Total */}
+            <div className="flex justify-between items-center mb-4">
+              <span className="text-navy text-sm font-semibold">Peso Total</span>
+              <div className="px-3 py-1 rounded" style={{ backgroundColor: 'hsl(var(--muted))', border: '1px solid hsl(210 45% 25%)' }}>
+                <span className="text-navy font-bold">{pesoTotal.toFixed(2)} Kg</span>
               </div>
-            ))
-          )}
-        </div>
+            </div>
 
-        {/* Footer with Total */}
-        <div className="bg-cream-dark border-t-2 border-border p-3">
-          <div className="flex justify-between items-center mb-3">
-            <span className="text-sm text-muted-foreground font-medium">Peso Total</span>
-            <span className="text-lg font-bold text-foreground">{pesoTotal.toFixed(2)} Kg</span>
-          </div>
-          
-          <div className="text-xs text-muted-foreground">
-            <p><strong>Tabela</strong> - Lista de Material</p>
-            <p className="text-right">Fonte: Própria.</p>
-          </div>
-          
-          <div className="flex justify-between items-center mt-3 pt-3 border-t border-border">
-            <span className="text-xs text-muted-foreground">Atenciosamente,</span>
-            <span className="text-xs text-foreground font-medium">MetalCalc Pro</span>
+            {/* Info text */}
+            <div className="text-xs text-navy/70 space-y-1">
+              <div className="flex justify-between">
+                <span><strong>Tabela</strong> - Lista de Material</span>
+                <span><strong>Fonte:</strong> Própria.</span>
+              </div>
+              <div className="flex justify-between pt-2 border-t border-navy/20">
+                <span>Atenciosamente,</span>
+                <span className="font-medium italic">MetalCalc Pro</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-primary p-3 flex items-center justify-between safe-area-bottom">
-        {/* Logo */}
-        <div className="w-14 h-14 rounded-full bg-foreground/20 flex items-center justify-center shadow-button">
-          <span className="text-3xl font-bold text-primary-foreground italic">M</span>
-        </div>
+      {/* Back button */}
+      <button
+        onClick={onBack}
+        className="fixed top-4 left-4 w-10 h-10 rounded-full bg-navy flex items-center justify-center text-white text-xl shadow-button hover:opacity-90 transition-opacity"
+      >
+        ←
+      </button>
 
-        {/* PDF Button */}
+      {/* Bottom Navigation */}
+      <div className="bottom-nav flex items-center justify-between">
+        <Logo size="md" />
+
         {projetos.length > 0 && (
           <button
             onClick={onPDF}
-            className="bg-destructive text-destructive-foreground px-4 py-3 rounded-lg font-semibold text-sm shadow-button flex items-center gap-2 hover:opacity-90 transition-opacity"
+            className="btn-teal flex items-center gap-2"
           >
-            <span className="text-lg">📄</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2ZM16 18H8V16H16V18ZM16 14H8V12H16V14ZM13 9V3.5L18.5 9H13Z" />
+            </svg>
             PDF
           </button>
         )}
       </div>
-
-      {/* Back to Home floating button */}
-      <button
-        onClick={onBack}
-        className="fixed top-4 left-4 w-10 h-10 rounded-full bg-foreground/20 flex items-center justify-center text-primary-foreground text-xl shadow-button hover:bg-foreground/30 transition-colors"
-      >
-        ←
-      </button>
     </div>
   );
 };
