@@ -8,10 +8,7 @@ interface SplashScreenProps {
 export const SplashScreen: React.FC<SplashScreenProps> = ({ onStart }) => {
   return (
     <div className="app-container items-center justify-center">
-      <Logo size="xl" onClick={onStart} />
-      <p className="text-primary-foreground/60 text-sm mt-4 font-medium">
-        Toque para iniciar
-      </p>
+      <Logo size="xl" onClick={onStart} label="Iniciar" />
     </div>
   );
 };

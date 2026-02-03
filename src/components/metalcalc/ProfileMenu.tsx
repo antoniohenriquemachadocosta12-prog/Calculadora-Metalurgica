@@ -5,6 +5,7 @@ import { BottomNav } from './BottomNav';
 interface ProfileMenuProps {
   onSelect: (key: string) => void;
   onViewList: () => void;
+  onBack: () => void;
   projetosCount: number;
 }
 
@@ -66,7 +67,7 @@ const ProfileIcons: Record<string, React.FC<{ className?: string }>> = {
   ),
 };
 
-export const ProfileMenu: React.FC<ProfileMenuProps> = ({ onSelect, onViewList, projetosCount }) => {
+export const ProfileMenu: React.FC<ProfileMenuProps> = ({ onSelect, onViewList, onBack, projetosCount }) => {
   const perfilKeys = Object.keys(PERFIS);
   const featuredProfile = PERFIS['perfilC'];
   const FeaturedIcon = ProfileIcons['perfilC'];
@@ -107,6 +108,7 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({ onSelect, onViewList, 
 
       {/* Bottom Navigation */}
       <BottomNav
+        onLogoClick={onBack}
         leftAction={{
           label: 'Cadastro',
           onClick: () => {},

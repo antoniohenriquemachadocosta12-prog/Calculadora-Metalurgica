@@ -1,6 +1,6 @@
 import React from 'react';
 import { Projeto } from '@/types/projeto';
-import { Logo } from './Logo';
+import { BottomNav } from './BottomNav';
 
 interface ProjectListProps {
   projetos: Projeto[];
@@ -103,30 +103,12 @@ export const ProjectList: React.FC<ProjectListProps> = ({ projetos, onBack, onDe
         </div>
       </div>
 
-      {/* Back button */}
-      <button
-        onClick={onBack}
-        className="fixed top-4 left-4 w-10 h-10 rounded-full bg-navy flex items-center justify-center text-white text-xl shadow-button hover:opacity-90 transition-opacity"
-      >
-        ←
-      </button>
-
       {/* Bottom Navigation */}
-      <div className="bottom-nav flex items-center justify-between">
-        <Logo size="md" />
-
-        {projetos.length > 0 && (
-          <button
-            onClick={onPDF}
-            className="btn-teal flex items-center gap-2"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2ZM16 18H8V16H16V18ZM16 14H8V12H16V14ZM13 9V3.5L18.5 9H13Z" />
-            </svg>
-            PDF
-          </button>
-        )}
-      </div>
+      <BottomNav
+        onLogoClick={onBack}
+        showPdfButton={projetos.length > 0}
+        onPdfClick={onPDF}
+      />
     </div>
   );
 };
