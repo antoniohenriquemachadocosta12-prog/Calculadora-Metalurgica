@@ -357,16 +357,9 @@ export const MeasurementForm: React.FC<MeasurementFormProps> = ({
         </div>
       </div>
 
-      {/* Back button */}
-      <button
-        onClick={onBack}
-        className="fixed top-4 left-4 w-10 h-10 rounded-full bg-navy flex items-center justify-center text-white text-xl shadow-button hover:opacity-90 transition-opacity"
-      >
-        ←
-      </button>
-
       {/* Bottom Navigation */}
       <BottomNav
+        onLogoClick={onBack}
         leftAction={{
           label: 'Repetir',
           onClick: handleRepetir,

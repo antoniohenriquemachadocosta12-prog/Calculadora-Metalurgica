@@ -16,18 +16,20 @@ interface BottomNavProps {
   };
   showPdfButton?: boolean;
   onPdfClick?: () => void;
+  onLogoClick?: () => void;
 }
 
 export const BottomNav: React.FC<BottomNavProps> = ({
   leftAction,
   rightAction,
   showPdfButton,
-  onPdfClick
+  onPdfClick,
+  onLogoClick
 }) => {
   return (
     <div className="bottom-nav flex items-center justify-between">
-      {/* Logo */}
-      <Logo size="md" />
+      {/* Logo as Voltar button */}
+      <Logo size="sm" onClick={onLogoClick} label="Voltar" />
 
       <div className="flex gap-3">
         {leftAction && (

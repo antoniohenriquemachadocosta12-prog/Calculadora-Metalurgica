@@ -6,8 +6,8 @@
 
 @layer base {
   :root {
-    /* MetalCalc Pro - Blue/Cream Theme */
-    --background: 210 60% 35%;
+    /* MetalCalc Pro - Orange/Cream Theme */
+    --background: 24 70% 50%;
     --foreground: 210 40% 20%;
 
     --card: 42 40% 92%;
@@ -16,8 +16,8 @@
     --popover: 42 40% 90%;
     --popover-foreground: 210 40% 20%;
 
-    /* Blue accent - primary brand color */
-    --primary: 210 60% 35%;
+    /* Orange accent - primary brand color */
+    --primary: 24 70% 50%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 42 35% 88%;
@@ -56,13 +56,13 @@
   }
 
   .dark {
-    --background: 210 60% 35%;
+    --background: 24 70% 50%;
     --foreground: 210 40% 20%;
     --card: 42 40% 92%;
     --card-foreground: 210 40% 20%;
     --popover: 42 40% 90%;
     --popover-foreground: 210 40% 20%;
-    --primary: 210 60% 35%;
+    --primary: 24 70% 50%;
     --primary-foreground: 0 0% 100%;
     --secondary: 42 35% 88%;
     --secondary-foreground: 210 40% 20%;
