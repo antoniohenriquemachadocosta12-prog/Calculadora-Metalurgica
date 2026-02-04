@@ -14,199 +14,479 @@ interface MeasurementFormProps {
   projetosCount: number;
 }
 
-// Interactive diagram with positioned inputs for Perfil C
-const DiagramaPerfilCInterativo: React.FC<{
-  medidas: Record<string, number>;
-  onChange: (campo: string, valor: string) => void;
-}> = ({ medidas, onChange }) => {
-  return (
-    <div className="relative w-full max-w-[320px] mx-auto">
-      {/* SVG Diagram */}
-      <svg viewBox="0 0 300 280" className="w-full h-auto">
-        {/* C Profile shape */}
-        <g transform="translate(100, 60)">
-          <path
-            d="M 0 0 L 100 0 L 100 20 L 20 20 L 20 130 L 100 130 L 100 150 L 0 150 Z"
-            fill="none"
-            stroke="hsl(var(--navy))"
-            strokeWidth="2"
-          />
-          {/* Diagonal line for perspective */}
-          <line x1="100" y1="0" x2="115" y2="-15" stroke="hsl(var(--navy))" strokeWidth="1.5" />
-          <line x1="100" y1="20" x2="115" y2="5" stroke="hsl(var(--navy))" strokeWidth="1.5" />
-          <line x1="115" y1="-15" x2="115" y2="5" stroke="hsl(var(--navy))" strokeWidth="1.5" />
-
-          {/* Dimension lines */}
-          <line x1="-15" y1="0" x2="-15" y2="150" stroke="hsl(var(--navy))" strokeWidth="1" />
-          <line x1="-20" y1="0" x2="-10" y2="0" stroke="hsl(var(--navy))" strokeWidth="1" />
-          <line x1="-20" y1="150" x2="-10" y2="150" stroke="hsl(var(--navy))" strokeWidth="1" />
-
-          <line x1="0" y1="165" x2="100" y2="165" stroke="hsl(var(--navy))" strokeWidth="1" />
-          <line x1="0" y1="160" x2="0" y2="170" stroke="hsl(var(--navy))" strokeWidth="1" />
-          <line x1="100" y1="160" x2="100" y2="170" stroke="hsl(var(--navy))" strokeWidth="1" />
-        </g>
-      </svg>
-
-      {/* Input for Altura (left side) */}
-      <div className="absolute left-2 top-1/2 -translate-y-1/2">
-        <input
-          type="number"
-          inputMode="decimal"
-          className="input-field w-16 text-center text-sm font-medium"
-          placeholder="0"
-          value={medidas.altura || ''}
-          onChange={(e) => onChange('altura', e.target.value)}
-        />
-      </div>
-
-      {/* Input for Largura (bottom) */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
-        <input
-          type="number"
-          inputMode="decimal"
-          className="input-field w-16 text-center text-sm font-medium"
-          placeholder="0"
-          value={medidas.largura || ''}
-          onChange={(e) => onChange('largura', e.target.value)}
-        />
-      </div>
-
-      {/* Input for Quantidade (X) */}
-      <div className="absolute top-16 right-16 flex items-center gap-1">
-        <span className="text-navy font-bold">X</span>
-        <input
-          type="number"
-          inputMode="numeric"
-          className="input-field w-14 text-center text-sm font-medium"
-          placeholder="1"
-          min="1"
-          value={medidas._quantidade || ''}
-          onChange={(e) => onChange('_quantidade', e.target.value)}
-        />
-      </div>
-
-      {/* Input for Comprimento */}
-      <div className="absolute top-1/3 right-4">
-        <input
-          type="number"
-          inputMode="decimal"
-          className="input-field w-20 text-center text-sm font-medium"
-          placeholder="0"
-          value={medidas.comprimento || ''}
-          onChange={(e) => onChange('comprimento', e.target.value)}
-        />
-      </div>
-
-      {/* Input for Espessura */}
-      <div className="absolute bottom-24 right-4">
-        <input
-          type="number"
-          inputMode="decimal"
-          className="input-field w-14 text-center text-sm font-medium"
-          placeholder="0"
-          value={medidas.espessura || ''}
-          onChange={(e) => onChange('espessura', e.target.value)}
-        />
-      </div>
-
-      {/* Input for Aba */}
-      <div className="absolute bottom-16 right-4">
-        <input
-          type="number"
-          inputMode="decimal"
-          className="input-field w-14 text-center text-sm font-medium"
-          placeholder="0"
-          value={medidas.aba || ''}
-          onChange={(e) => onChange('aba', e.target.value)}
-        />
-      </div>
+// Labeled input positioned around diagrams
+const LabeledInput: React.FC<{
+  label: string;
+  unidade: string;
+  value: number | string;
+  onChange: (val: string) => void;
+  placeholder?: string;
+}> = ({ label, unidade, value, onChange, placeholder = '0' }) => (
+  <div className="flex flex-col items-center gap-0.5">
+    <label className="text-navy text-[10px] font-bold uppercase tracking-wide">{label}</label>
+    <div className="flex items-center gap-1">
+      <input
+        type="number"
+        inputMode="decimal"
+        className="input-field w-16 text-center text-sm font-semibold py-1"
+        placeholder={placeholder}
+        value={value || ''}
+        onChange={(e) => onChange(e.target.value)}
+      />
+      <span className="text-navy text-[10px] font-medium">{unidade}</span>
     </div>
+  </div>
+);
+
+// Arrow dimension line helper
+const DimensionArrow: React.FC<{
+  x1: number; y1: number; x2: number; y2: number;
+  color?: string;
+}> = ({ x1, y1, x2, y2, color = 'hsl(24 70% 50%)' }) => {
+  const angle = Math.atan2(y2 - y1, x2 - x1);
+  const arrowSize = 6;
+  return (
+    <g>
+      <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={color} strokeWidth="1" />
+      {/* Arrow at start */}
+      <polygon points={`${x1},${y1} ${x1 + arrowSize * Math.cos(angle - 0.5)},${y1 + arrowSize * Math.sin(angle - 0.5)} ${x1 + arrowSize * Math.cos(angle + 0.5)},${y1 + arrowSize * Math.sin(angle + 0.5)}`} fill={color} />
+      {/* Arrow at end */}
+      <polygon points={`${x2},${y2} ${x2 - arrowSize * Math.cos(angle - 0.5)},${y2 - arrowSize * Math.sin(angle - 0.5)} ${x2 - arrowSize * Math.cos(angle + 0.5)},${y2 - arrowSize * Math.sin(angle + 0.5)}`} fill={color} />
+    </g>
   );
 };
 
-// Generic diagram with inputs below
-const DiagramaGenerico: React.FC<{
-  tipoPerfil: string;
+// ===== TECHNICAL DRAWINGS FOR EACH PROFILE =====
+
+const DiagramaPerfilC: React.FC<{
   medidas: Record<string, number>;
+  quantidade: number;
   onChange: (campo: string, valor: string) => void;
-  perfil: typeof PERFIS[string];
-}> = ({ tipoPerfil, medidas, onChange, perfil }) => {
-  // Profile icons as SVG
-  const renderProfileSVG = () => {
-    switch (tipoPerfil) {
-      case 'perfilC':
-        return (
-          <path d="M 50 20 L 150 20 L 150 40 L 70 40 L 70 160 L 150 160 L 150 180 L 50 180 Z"
-                fill="none" stroke="hsl(var(--navy))" strokeWidth="2" />
-        );
-      case 'perfilU':
-        return (
-          <path d="M 50 20 L 50 180 L 150 180 L 150 20 M 70 40 L 70 160 L 130 160 L 130 40"
-                fill="none" stroke="hsl(var(--navy))" strokeWidth="2" />
-        );
-      case 'barraQuadrada':
-        return <rect x="60" y="60" width="80" height="80" fill="none" stroke="hsl(var(--navy))" strokeWidth="2" />;
-      case 'barraRetangular':
-        return <rect x="40" y="70" width="120" height="60" fill="none" stroke="hsl(var(--navy))" strokeWidth="2" />;
-      case 'barraRedonda':
-        return <circle cx="100" cy="100" r="50" fill="none" stroke="hsl(var(--navy))" strokeWidth="2" />;
-      case 'tuboQuadrado':
-        return (
-          <>
-            <rect x="50" y="50" width="100" height="100" fill="none" stroke="hsl(var(--navy))" strokeWidth="2" />
-            <rect x="70" y="70" width="60" height="60" fill="none" stroke="hsl(var(--navy))" strokeWidth="2" />
-          </>
-        );
-      case 'tuboRetangular':
-        return (
-          <>
-            <rect x="30" y="60" width="140" height="80" fill="none" stroke="hsl(var(--navy))" strokeWidth="2" />
-            <rect x="50" y="80" width="100" height="40" fill="none" stroke="hsl(var(--navy))" strokeWidth="2" />
-          </>
-        );
-      case 'tuboRedondo':
-        return (
-          <>
-            <circle cx="100" cy="100" r="55" fill="none" stroke="hsl(var(--navy))" strokeWidth="2" />
-            <circle cx="100" cy="100" r="35" fill="none" stroke="hsl(var(--navy))" strokeWidth="2" />
-          </>
-        );
-      case 'cantoneira':
-        return <path d="M 40 40 L 40 160 L 60 160 L 60 60 L 160 60 L 160 40 Z" fill="none" stroke="hsl(var(--navy))" strokeWidth="2" />;
-      case 'chapa':
-        return <rect x="30" y="80" width="140" height="40" fill="none" stroke="hsl(var(--navy))" strokeWidth="2" />;
-      default:
-        return <rect x="50" y="50" width="100" height="100" fill="none" stroke="hsl(var(--navy))" strokeWidth="2" />;
-    }
-  };
+}> = ({ medidas, quantidade, onChange }) => (
+  <div className="flex flex-col items-center gap-3">
+    <div className="relative w-full max-w-[300px]">
+      <svg viewBox="0 0 280 220" className="w-full h-auto">
+        {/* C-channel cross section */}
+        <g transform="translate(90, 20)">
+          {/* Outer shape */}
+          <path d="M 0 0 L 80 0 L 80 15 L 15 15 L 15 145 L 80 145 L 80 160 L 0 160 Z"
+            fill="hsl(42 40% 92%)" stroke="hsl(210 45% 25%)" strokeWidth="2.5" />
+          {/* Inner hatching for thickness */}
+          <path d="M 0 0 L 80 0 L 80 15 L 15 15 L 15 145 L 80 145 L 80 160 L 0 160 Z"
+            fill="none" stroke="hsl(210 45% 25%)" strokeWidth="0.5" strokeDasharray="3,3" />
 
-  return (
-    <div className="flex flex-col items-center gap-4">
-      {/* SVG Diagram */}
-      <svg viewBox="0 0 200 200" className="w-40 h-40">
-        {renderProfileSVG()}
+          {/* Dimension: Altura - left side */}
+          <DimensionArrow x1={-20} y1={0} x2={-20} y2={160} />
+          <line x1={-5} y1={0} x2={-25} y2={0} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+          <line x1={-5} y1={160} x2={-25} y2={160} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+
+          {/* Dimension: Largura - bottom */}
+          <DimensionArrow x1={0} y1={180} x2={80} y2={180} />
+          <line x1={0} y1={165} x2={0} y2={185} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+          <line x1={80} y1={165} x2={80} y2={185} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+
+          {/* Dimension: Aba - top */}
+          <DimensionArrow x1={0} y1={-12} x2={80} y2={-12} />
+          <text x={40} y={-15} textAnchor="middle" fontSize="9" fill="hsl(24 70% 50%)" fontWeight="bold">Aba</text>
+
+          {/* Dimension: Espessura - on wall */}
+          <DimensionArrow x1={0} y1={7.5} x2={15} y2={7.5} />
+          <text x={7.5} y={-2} textAnchor="middle" fontSize="8" fill="hsl(24 70% 50%)" fontWeight="bold">e</text>
+        </g>
+
+        {/* Labels on drawing */}
+        <text x={55} y={110} textAnchor="middle" fontSize="10" fill="hsl(24 70% 50%)" fontWeight="bold">Altura</text>
+        <text x={170} y={215} textAnchor="middle" fontSize="10" fill="hsl(24 70% 50%)" fontWeight="bold">Largura</text>
       </svg>
+    </div>
 
-      {/* Input Grid */}
-      <div className="grid grid-cols-2 gap-3 w-full max-w-xs">
-        {perfil.campos.map((campo) => (
-          <div key={campo} className="flex flex-col gap-1">
-            <label className="text-navy text-xs font-medium">
-              {perfil.labels[campo]} ({perfil.unidades[campo]})
-            </label>
-            <input
-              type="number"
-              inputMode="decimal"
-              className="input-field text-sm"
-              placeholder="0"
-              value={medidas[campo] || ''}
-              onChange={(e) => onChange(campo, e.target.value)}
-            />
-          </div>
-        ))}
+    {/* Input fields in organized grid */}
+    <div className="grid grid-cols-3 gap-2 w-full max-w-xs">
+      <LabeledInput label="Altura" unidade="mm" value={medidas.altura} onChange={(v) => onChange('altura', v)} />
+      <LabeledInput label="Largura" unidade="mm" value={medidas.largura} onChange={(v) => onChange('largura', v)} />
+      <LabeledInput label="Aba" unidade="mm" value={medidas.aba} onChange={(v) => onChange('aba', v)} />
+      <LabeledInput label="Espessura" unidade="mm" value={medidas.espessura} onChange={(v) => onChange('espessura', v)} />
+      <LabeledInput label="Comprim." unidade="mm" value={medidas.comprimento} onChange={(v) => onChange('comprimento', v)} />
+      <LabeledInput label="Qtd" unidade="pç" value={quantidade} onChange={(v) => onChange('_quantidade', v)} placeholder="1" />
+    </div>
+  </div>
+);
+
+const DiagramaPerfilU: React.FC<{
+  medidas: Record<string, number>;
+  quantidade: number;
+  onChange: (campo: string, valor: string) => void;
+}> = ({ medidas, quantidade, onChange }) => (
+  <div className="flex flex-col items-center gap-3">
+    <div className="relative w-full max-w-[280px]">
+      <svg viewBox="0 0 260 210" className="w-full h-auto">
+        <g transform="translate(80, 15)">
+          {/* U-channel */}
+          <path d="M 0 0 L 0 140 L 100 140 L 100 0 L 85 0 L 85 125 L 15 125 L 15 0 Z"
+            fill="hsl(42 40% 92%)" stroke="hsl(210 45% 25%)" strokeWidth="2.5" />
+
+          {/* Dimension: Altura - left */}
+          <DimensionArrow x1={-20} y1={0} x2={-20} y2={140} />
+          <line x1={-5} y1={0} x2={-25} y2={0} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+          <line x1={-5} y1={140} x2={-25} y2={140} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+
+          {/* Dimension: Largura - bottom */}
+          <DimensionArrow x1={0} y1={160} x2={100} y2={160} />
+          <line x1={0} y1={145} x2={0} y2={165} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+          <line x1={100} y1={145} x2={100} y2={165} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+
+          {/* Dimension: Espessura */}
+          <DimensionArrow x1={0} y1={-10} x2={15} y2={-10} />
+          <text x={7.5} y={-14} textAnchor="middle" fontSize="8" fill="hsl(24 70% 50%)" fontWeight="bold">e</text>
+        </g>
+
+        <text x={45} y={95} textAnchor="middle" fontSize="10" fill="hsl(24 70% 50%)" fontWeight="bold">Altura</text>
+        <text x={165} y={195} textAnchor="middle" fontSize="10" fill="hsl(24 70% 50%)" fontWeight="bold">Largura</text>
+      </svg>
+    </div>
+    <div className="grid grid-cols-2 gap-2 w-full max-w-xs">
+      <LabeledInput label="Altura" unidade="mm" value={medidas.altura} onChange={(v) => onChange('altura', v)} />
+      <LabeledInput label="Largura" unidade="mm" value={medidas.largura} onChange={(v) => onChange('largura', v)} />
+      <LabeledInput label="Espessura" unidade="mm" value={medidas.espessura} onChange={(v) => onChange('espessura', v)} />
+      <LabeledInput label="Comprim." unidade="mm" value={medidas.comprimento} onChange={(v) => onChange('comprimento', v)} />
+      <div className="col-span-2 flex justify-center">
+        <LabeledInput label="Qtd" unidade="pç" value={quantidade} onChange={(v) => onChange('_quantidade', v)} placeholder="1" />
       </div>
     </div>
-  );
+  </div>
+);
+
+const DiagramaBarraQuadrada: React.FC<{
+  medidas: Record<string, number>;
+  quantidade: number;
+  onChange: (campo: string, valor: string) => void;
+}> = ({ medidas, quantidade, onChange }) => (
+  <div className="flex flex-col items-center gap-3">
+    <div className="w-full max-w-[220px]">
+      <svg viewBox="0 0 200 200" className="w-full h-auto">
+        <g transform="translate(40, 20)">
+          <rect x={0} y={0} width={120} height={120} fill="hsl(42 40% 92%)" stroke="hsl(210 45% 25%)" strokeWidth="2.5" />
+          {/* Diagonal hatching */}
+          <line x1={0} y1={0} x2={120} y2={120} stroke="hsl(210 45% 25%/0.2)" strokeWidth="0.5" />
+          <line x1={120} y1={0} x2={0} y2={120} stroke="hsl(210 45% 25%/0.2)" strokeWidth="0.5" />
+
+          {/* Dimension: Lado - left */}
+          <DimensionArrow x1={-15} y1={0} x2={-15} y2={120} />
+          <line x1={-5} y1={0} x2={-20} y2={0} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+          <line x1={-5} y1={120} x2={-20} y2={120} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+
+          {/* Dimension: Lado - bottom */}
+          <DimensionArrow x1={0} y1={140} x2={120} y2={140} />
+          <line x1={0} y1={125} x2={0} y2={145} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+          <line x1={120} y1={125} x2={120} y2={145} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+        </g>
+        <text x={15} y={85} textAnchor="middle" fontSize="10" fill="hsl(24 70% 50%)" fontWeight="bold">Lado</text>
+        <text x={100} y={178} textAnchor="middle" fontSize="10" fill="hsl(24 70% 50%)" fontWeight="bold">Lado</text>
+      </svg>
+    </div>
+    <div className="grid grid-cols-3 gap-2 w-full max-w-xs">
+      <LabeledInput label="Lado" unidade="mm" value={medidas.lado} onChange={(v) => onChange('lado', v)} />
+      <LabeledInput label="Comprim." unidade="mm" value={medidas.comprimento} onChange={(v) => onChange('comprimento', v)} />
+      <LabeledInput label="Qtd" unidade="pç" value={quantidade} onChange={(v) => onChange('_quantidade', v)} placeholder="1" />
+    </div>
+  </div>
+);
+
+const DiagramaBarraRetangular: React.FC<{
+  medidas: Record<string, number>;
+  quantidade: number;
+  onChange: (campo: string, valor: string) => void;
+}> = ({ medidas, quantidade, onChange }) => (
+  <div className="flex flex-col items-center gap-3">
+    <div className="w-full max-w-[260px]">
+      <svg viewBox="0 0 240 170" className="w-full h-auto">
+        <g transform="translate(40, 15)">
+          <rect x={0} y={0} width={150} height={80} fill="hsl(42 40% 92%)" stroke="hsl(210 45% 25%)" strokeWidth="2.5" />
+          <line x1={0} y1={0} x2={150} y2={80} stroke="hsl(210 45% 25%/0.2)" strokeWidth="0.5" />
+          <line x1={150} y1={0} x2={0} y2={80} stroke="hsl(210 45% 25%/0.2)" strokeWidth="0.5" />
+
+          {/* Dimension: Altura - left */}
+          <DimensionArrow x1={-15} y1={0} x2={-15} y2={80} />
+          <line x1={-5} y1={0} x2={-20} y2={0} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+          <line x1={-5} y1={80} x2={-20} y2={80} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+
+          {/* Dimension: Largura - bottom */}
+          <DimensionArrow x1={0} y1={100} x2={150} y2={100} />
+          <line x1={0} y1={85} x2={0} y2={105} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+          <line x1={150} y1={85} x2={150} y2={105} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+        </g>
+        <text x={15} y={60} textAnchor="middle" fontSize="10" fill="hsl(24 70% 50%)" fontWeight="bold">Altura</text>
+        <text x={115} y={132} textAnchor="middle" fontSize="10" fill="hsl(24 70% 50%)" fontWeight="bold">Largura</text>
+      </svg>
+    </div>
+    <div className="grid grid-cols-3 gap-2 w-full max-w-xs">
+      <LabeledInput label="Largura" unidade="mm" value={medidas.largura} onChange={(v) => onChange('largura', v)} />
+      <LabeledInput label="Altura" unidade="mm" value={medidas.altura} onChange={(v) => onChange('altura', v)} />
+      <LabeledInput label="Comprim." unidade="mm" value={medidas.comprimento} onChange={(v) => onChange('comprimento', v)} />
+      <div className="col-span-3 flex justify-center">
+        <LabeledInput label="Qtd" unidade="pç" value={quantidade} onChange={(v) => onChange('_quantidade', v)} placeholder="1" />
+      </div>
+    </div>
+  </div>
+);
+
+const DiagramaBarraRedonda: React.FC<{
+  medidas: Record<string, number>;
+  quantidade: number;
+  onChange: (campo: string, valor: string) => void;
+}> = ({ medidas, quantidade, onChange }) => (
+  <div className="flex flex-col items-center gap-3">
+    <div className="w-full max-w-[200px]">
+      <svg viewBox="0 0 180 180" className="w-full h-auto">
+        <g transform="translate(90, 90)">
+          <circle cx={0} cy={0} r={60} fill="hsl(42 40% 92%)" stroke="hsl(210 45% 25%)" strokeWidth="2.5" />
+          {/* Center cross */}
+          <line x1={-5} y1={0} x2={5} y2={0} stroke="hsl(210 45% 25%)" strokeWidth="1" />
+          <line x1={0} y1={-5} x2={0} y2={5} stroke="hsl(210 45% 25%)" strokeWidth="1" />
+
+          {/* Dimension: Diâmetro */}
+          <DimensionArrow x1={-60} y1={0} x2={60} y2={0} />
+        </g>
+        <text x={90} y={80} textAnchor="middle" fontSize="10" fill="hsl(24 70% 50%)" fontWeight="bold">Diâmetro</text>
+      </svg>
+    </div>
+    <div className="grid grid-cols-3 gap-2 w-full max-w-xs">
+      <LabeledInput label="Diâmetro" unidade="mm" value={medidas.diametro} onChange={(v) => onChange('diametro', v)} />
+      <LabeledInput label="Comprim." unidade="mm" value={medidas.comprimento} onChange={(v) => onChange('comprimento', v)} />
+      <LabeledInput label="Qtd" unidade="pç" value={quantidade} onChange={(v) => onChange('_quantidade', v)} placeholder="1" />
+    </div>
+  </div>
+);
+
+const DiagramaTuboQuadrado: React.FC<{
+  medidas: Record<string, number>;
+  quantidade: number;
+  onChange: (campo: string, valor: string) => void;
+}> = ({ medidas, quantidade, onChange }) => (
+  <div className="flex flex-col items-center gap-3">
+    <div className="w-full max-w-[220px]">
+      <svg viewBox="0 0 200 200" className="w-full h-auto">
+        <g transform="translate(40, 20)">
+          {/* Outer */}
+          <rect x={0} y={0} width={120} height={120} fill="hsl(42 40% 88%)" stroke="hsl(210 45% 25%)" strokeWidth="2.5" />
+          {/* Inner (hollow) */}
+          <rect x={18} y={18} width={84} height={84} fill="hsl(42 40% 96%)" stroke="hsl(210 45% 25%)" strokeWidth="1.5" />
+
+          {/* Dimension: Lado Ext - left */}
+          <DimensionArrow x1={-15} y1={0} x2={-15} y2={120} />
+          <line x1={-5} y1={0} x2={-20} y2={0} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+          <line x1={-5} y1={120} x2={-20} y2={120} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+
+          {/* Dimension: Espessura - top */}
+          <DimensionArrow x1={0} y1={-10} x2={18} y2={-10} />
+          <text x={9} y={-14} textAnchor="middle" fontSize="8" fill="hsl(24 70% 50%)" fontWeight="bold">e</text>
+
+          {/* Dimension: Lado - bottom */}
+          <DimensionArrow x1={0} y1={140} x2={120} y2={140} />
+          <line x1={0} y1={125} x2={0} y2={145} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+          <line x1={120} y1={125} x2={120} y2={145} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+        </g>
+        <text x={15} y={85} textAnchor="middle" fontSize="9" fill="hsl(24 70% 50%)" fontWeight="bold">Lado</text>
+        <text x={100} y={178} textAnchor="middle" fontSize="9" fill="hsl(24 70% 50%)" fontWeight="bold">Lado Ext.</text>
+      </svg>
+    </div>
+    <div className="grid grid-cols-3 gap-2 w-full max-w-xs">
+      <LabeledInput label="Lado Ext." unidade="mm" value={medidas.lado} onChange={(v) => onChange('lado', v)} />
+      <LabeledInput label="Espessura" unidade="mm" value={medidas.espessura} onChange={(v) => onChange('espessura', v)} />
+      <LabeledInput label="Comprim." unidade="mm" value={medidas.comprimento} onChange={(v) => onChange('comprimento', v)} />
+      <div className="col-span-3 flex justify-center">
+        <LabeledInput label="Qtd" unidade="pç" value={quantidade} onChange={(v) => onChange('_quantidade', v)} placeholder="1" />
+      </div>
+    </div>
+  </div>
+);
+
+const DiagramaTuboRetangular: React.FC<{
+  medidas: Record<string, number>;
+  quantidade: number;
+  onChange: (campo: string, valor: string) => void;
+}> = ({ medidas, quantidade, onChange }) => (
+  <div className="flex flex-col items-center gap-3">
+    <div className="w-full max-w-[260px]">
+      <svg viewBox="0 0 240 170" className="w-full h-auto">
+        <g transform="translate(40, 15)">
+          {/* Outer */}
+          <rect x={0} y={0} width={150} height={90} fill="hsl(42 40% 88%)" stroke="hsl(210 45% 25%)" strokeWidth="2.5" />
+          {/* Inner */}
+          <rect x={18} y={18} width={114} height={54} fill="hsl(42 40% 96%)" stroke="hsl(210 45% 25%)" strokeWidth="1.5" />
+
+          {/* Dimension: Altura Ext - left */}
+          <DimensionArrow x1={-15} y1={0} x2={-15} y2={90} />
+          <line x1={-5} y1={0} x2={-20} y2={0} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+          <line x1={-5} y1={90} x2={-20} y2={90} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+
+          {/* Dimension: Largura Ext - bottom */}
+          <DimensionArrow x1={0} y1={110} x2={150} y2={110} />
+          <line x1={0} y1={95} x2={0} y2={115} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+          <line x1={150} y1={95} x2={150} y2={115} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+
+          {/* Dimension: Espessura */}
+          <DimensionArrow x1={0} y1={-10} x2={18} y2={-10} />
+          <text x={9} y={-14} textAnchor="middle" fontSize="8" fill="hsl(24 70% 50%)" fontWeight="bold">e</text>
+        </g>
+        <text x={15} y={65} textAnchor="middle" fontSize="9" fill="hsl(24 70% 50%)" fontWeight="bold">Alt.</text>
+        <text x={115} y={142} textAnchor="middle" fontSize="9" fill="hsl(24 70% 50%)" fontWeight="bold">Largura Ext.</text>
+      </svg>
+    </div>
+    <div className="grid grid-cols-2 gap-2 w-full max-w-xs">
+      <LabeledInput label="Largura Ext." unidade="mm" value={medidas.largura} onChange={(v) => onChange('largura', v)} />
+      <LabeledInput label="Altura Ext." unidade="mm" value={medidas.altura} onChange={(v) => onChange('altura', v)} />
+      <LabeledInput label="Espessura" unidade="mm" value={medidas.espessura} onChange={(v) => onChange('espessura', v)} />
+      <LabeledInput label="Comprim." unidade="mm" value={medidas.comprimento} onChange={(v) => onChange('comprimento', v)} />
+      <div className="col-span-2 flex justify-center">
+        <LabeledInput label="Qtd" unidade="pç" value={quantidade} onChange={(v) => onChange('_quantidade', v)} placeholder="1" />
+      </div>
+    </div>
+  </div>
+);
+
+const DiagramaTuboRedondo: React.FC<{
+  medidas: Record<string, number>;
+  quantidade: number;
+  onChange: (campo: string, valor: string) => void;
+}> = ({ medidas, quantidade, onChange }) => (
+  <div className="flex flex-col items-center gap-3">
+    <div className="w-full max-w-[200px]">
+      <svg viewBox="0 0 180 180" className="w-full h-auto">
+        <g transform="translate(90, 90)">
+          {/* Outer circle */}
+          <circle cx={0} cy={0} r={65} fill="hsl(42 40% 88%)" stroke="hsl(210 45% 25%)" strokeWidth="2.5" />
+          {/* Inner circle */}
+          <circle cx={0} cy={0} r={45} fill="hsl(42 40% 96%)" stroke="hsl(210 45% 25%)" strokeWidth="1.5" />
+          {/* Center */}
+          <line x1={-4} y1={0} x2={4} y2={0} stroke="hsl(210 45% 25%)" strokeWidth="1" />
+          <line x1={0} y1={-4} x2={0} y2={4} stroke="hsl(210 45% 25%)" strokeWidth="1" />
+
+          {/* Dimension: Diâmetro Externo */}
+          <DimensionArrow x1={-65} y1={0} x2={65} y2={0} />
+
+          {/* Dimension: Espessura */}
+          <DimensionArrow x1={45} y1={-20} x2={65} y2={-20} />
+          <text x={55} y={-24} textAnchor="middle" fontSize="8" fill="hsl(24 70% 50%)" fontWeight="bold">e</text>
+        </g>
+        <text x={90} y={82} textAnchor="middle" fontSize="9" fill="hsl(24 70% 50%)" fontWeight="bold">Diâm. Ext.</text>
+      </svg>
+    </div>
+    <div className="grid grid-cols-3 gap-2 w-full max-w-xs">
+      <LabeledInput label="Diâm. Ext." unidade="mm" value={medidas.diametroExterno} onChange={(v) => onChange('diametroExterno', v)} />
+      <LabeledInput label="Espessura" unidade="mm" value={medidas.espessura} onChange={(v) => onChange('espessura', v)} />
+      <LabeledInput label="Comprim." unidade="mm" value={medidas.comprimento} onChange={(v) => onChange('comprimento', v)} />
+      <div className="col-span-3 flex justify-center">
+        <LabeledInput label="Qtd" unidade="pç" value={quantidade} onChange={(v) => onChange('_quantidade', v)} placeholder="1" />
+      </div>
+    </div>
+  </div>
+);
+
+const DiagramaCantoneira: React.FC<{
+  medidas: Record<string, number>;
+  quantidade: number;
+  onChange: (campo: string, valor: string) => void;
+}> = ({ medidas, quantidade, onChange }) => (
+  <div className="flex flex-col items-center gap-3">
+    <div className="w-full max-w-[220px]">
+      <svg viewBox="0 0 220 200" className="w-full h-auto">
+        <g transform="translate(50, 15)">
+          {/* L-shape */}
+          <path d="M 0 0 L 0 130 L 18 130 L 18 18 L 120 18 L 120 0 Z"
+            fill="hsl(42 40% 92%)" stroke="hsl(210 45% 25%)" strokeWidth="2.5" />
+
+          {/* Dimension: Aba 1 (vertical) - left */}
+          <DimensionArrow x1={-20} y1={0} x2={-20} y2={130} />
+          <line x1={-5} y1={0} x2={-25} y2={0} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+          <line x1={-5} y1={130} x2={-25} y2={130} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+
+          {/* Dimension: Aba 2 (horizontal) - bottom */}
+          <DimensionArrow x1={0} y1={150} x2={120} y2={150} />
+          <line x1={0} y1={135} x2={0} y2={155} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+          <line x1={120} y1={135} x2={120} y2={155} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+
+          {/* Dimension: Espessura - top */}
+          <DimensionArrow x1={120} y1={-10} x2={120} y2={18} color="hsl(24 70% 50%)" />
+          <text x={132} y={7} textAnchor="start" fontSize="8" fill="hsl(24 70% 50%)" fontWeight="bold">e</text>
+        </g>
+        <text x={20} y={85} textAnchor="middle" fontSize="9" fill="hsl(24 70% 50%)" fontWeight="bold">Aba 1</text>
+        <text x={110} y={182} textAnchor="middle" fontSize="9" fill="hsl(24 70% 50%)" fontWeight="bold">Aba 2</text>
+      </svg>
+    </div>
+    <div className="grid grid-cols-2 gap-2 w-full max-w-xs">
+      <LabeledInput label="Aba 1" unidade="mm" value={medidas.aba1} onChange={(v) => onChange('aba1', v)} />
+      <LabeledInput label="Aba 2" unidade="mm" value={medidas.aba2} onChange={(v) => onChange('aba2', v)} />
+      <LabeledInput label="Espessura" unidade="mm" value={medidas.espessura} onChange={(v) => onChange('espessura', v)} />
+      <LabeledInput label="Comprim." unidade="mm" value={medidas.comprimento} onChange={(v) => onChange('comprimento', v)} />
+      <div className="col-span-2 flex justify-center">
+        <LabeledInput label="Qtd" unidade="pç" value={quantidade} onChange={(v) => onChange('_quantidade', v)} placeholder="1" />
+      </div>
+    </div>
+  </div>
+);
+
+const DiagramaChapa: React.FC<{
+  medidas: Record<string, number>;
+  quantidade: number;
+  onChange: (campo: string, valor: string) => void;
+}> = ({ medidas, quantidade, onChange }) => (
+  <div className="flex flex-col items-center gap-3">
+    <div className="w-full max-w-[260px]">
+      <svg viewBox="0 0 240 160" className="w-full h-auto">
+        <g transform="translate(40, 15)">
+          {/* 3D plate illusion */}
+          <rect x={0} y={20} width={150} height={80} fill="hsl(42 40% 92%)" stroke="hsl(210 45% 25%)" strokeWidth="2.5" />
+          {/* Top face */}
+          <polygon points="0,20 20,0 170,0 150,20" fill="hsl(42 40% 88%)" stroke="hsl(210 45% 25%)" strokeWidth="1.5" />
+          {/* Right face */}
+          <polygon points="150,20 170,0 170,80 150,100" fill="hsl(42 40% 85%)" stroke="hsl(210 45% 25%)" strokeWidth="1.5" />
+
+          {/* Dimension: Largura - bottom */}
+          <DimensionArrow x1={0} y1={118} x2={150} y2={118} />
+          <line x1={0} y1={105} x2={0} y2={123} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+          <line x1={150} y1={105} x2={150} y2={123} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+
+          {/* Dimension: Altura - left */}
+          <DimensionArrow x1={-15} y1={20} x2={-15} y2={100} />
+          <line x1={-5} y1={20} x2={-20} y2={20} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+          <line x1={-5} y1={100} x2={-20} y2={100} stroke="hsl(24 70% 50%)" strokeWidth="0.5" />
+
+          {/* Dimension: Espessura - top right */}
+          <DimensionArrow x1={158} y1={0} x2={158} y2={20} />
+          <text x={168} y={14} textAnchor="start" fontSize="8" fill="hsl(24 70% 50%)" fontWeight="bold">e</text>
+        </g>
+        <text x={15} y={75} textAnchor="middle" fontSize="9" fill="hsl(24 70% 50%)" fontWeight="bold">Alt.</text>
+        <text x={115} y={150} textAnchor="middle" fontSize="9" fill="hsl(24 70% 50%)" fontWeight="bold">Largura</text>
+      </svg>
+    </div>
+    <div className="grid grid-cols-3 gap-2 w-full max-w-xs">
+      <LabeledInput label="Largura" unidade="mm" value={medidas.largura} onChange={(v) => onChange('largura', v)} />
+      <LabeledInput label="Altura" unidade="mm" value={medidas.altura} onChange={(v) => onChange('altura', v)} />
+      <LabeledInput label="Espessura" unidade="mm" value={medidas.espessura} onChange={(v) => onChange('espessura', v)} />
+      <div className="col-span-3 flex justify-center">
+        <LabeledInput label="Qtd" unidade="pç" value={quantidade} onChange={(v) => onChange('_quantidade', v)} placeholder="1" />
+      </div>
+    </div>
+  </div>
+);
+
+// Map profile types to their diagram components
+const DiagramMap: Record<string, React.FC<{
+  medidas: Record<string, number>;
+  quantidade: number;
+  onChange: (campo: string, valor: string) => void;
+}>> = {
+  perfilC: DiagramaPerfilC,
+  perfilU: DiagramaPerfilU,
+  barraQuadrada: DiagramaBarraQuadrada,
+  barraRetangular: DiagramaBarraRetangular,
+  barraRedonda: DiagramaBarraRedonda,
+  tuboQuadrado: DiagramaTuboQuadrado,
+  tuboRetangular: DiagramaTuboRetangular,
+  tuboRedondo: DiagramaTuboRedondo,
+  cantoneira: DiagramaCantoneira,
+  chapa: DiagramaChapa,
 };
 
 export const MeasurementForm: React.FC<MeasurementFormProps> = ({
@@ -295,38 +575,19 @@ export const MeasurementForm: React.FC<MeasurementFormProps> = ({
 
         {/* Diagram and Inputs Area */}
         <div className="bg-cream p-4">
-          {tipoPerfil === 'perfilC' ? (
-            <DiagramaPerfilCInterativo
-              medidas={{ ...medidas, _quantidade: quantidade }}
-              onChange={handleChange}
-            />
-          ) : (
-            <DiagramaGenerico
-              tipoPerfil={tipoPerfil}
-              medidas={medidas}
-              onChange={handleChange}
-              perfil={perfil}
-            />
-          )}
-
-          {/* Quantity input for non-perfilC */}
-          {tipoPerfil !== 'perfilC' && (
-            <div className="mt-4 flex justify-center">
-              <div className="flex items-center gap-2">
-                <span className="text-navy font-bold">Qtd:</span>
-                <input
-                  type="number"
-                  inputMode="numeric"
-                  className="input-field w-16 text-center text-sm font-medium"
-                  placeholder="1"
-                  min="1"
-                  value={quantidade}
-                  onChange={(e) => handleChange('_quantidade', e.target.value)}
+          {(() => {
+            const DiagramComponent = DiagramMap[tipoPerfil];
+            if (DiagramComponent) {
+              return (
+                <DiagramComponent
+                  medidas={medidas}
+                  quantidade={quantidade}
+                  onChange={handleChange}
                 />
-                <span className="text-navy text-sm">pç</span>
-              </div>
-            </div>
-          )}
+              );
+            }
+            return null;
+          })()}
 
           {/* Material Selector */}
           <button
