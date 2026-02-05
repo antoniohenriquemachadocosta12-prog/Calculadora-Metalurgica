@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { Projeto } from '@/types/projeto';
 import { BottomNav } from './BottomNav';
 
@@ -9,11 +9,16 @@ interface ProjectListProps {
   onPDF: () => void;
 }
 
-export const ProjectList: React.FC<ProjectListProps> = ({ projetos, onBack, onDelete, onPDF }) => {
+export const ProjectList = forwardRef<HTMLDivElement, ProjectListProps>(({
+  projetos,
+  onBack,
+  onDelete,
+  onPDF
+}, ref) => {
   const pesoTotal = projetos.reduce((acc, p) => acc + p.resultado.pesoTotal, 0);
 
   return (
-    <div className="app-container pb-24">
+    <div ref={ref} className="app-container pb-24">
       {/* Main Content Card */}
       <div className="content-card">
         {/* Table */}
@@ -111,4 +116,6 @@ export const ProjectList: React.FC<ProjectListProps> = ({ projetos, onBack, onDe
       />
     </div>
   );
-};
+});
+
+ProjectList.displayName = 'ProjectList';

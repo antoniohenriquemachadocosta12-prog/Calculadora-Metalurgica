@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { Logo } from './Logo';
 
 interface BottomNavProps {
@@ -19,15 +19,15 @@ interface BottomNavProps {
   onLogoClick?: () => void;
 }
 
-export const BottomNav: React.FC<BottomNavProps> = ({
+export const BottomNav = forwardRef<HTMLDivElement, BottomNavProps>(({
   leftAction,
   rightAction,
   showPdfButton,
   onPdfClick,
   onLogoClick
-}) => {
+}, ref) => {
   return (
-    <div className="bottom-nav flex items-center justify-between">
+    <div ref={ref} className="bottom-nav flex items-center justify-between">
       {/* Logo as Voltar button */}
       <Logo size="sm" onClick={onLogoClick} label="Voltar" />
 
@@ -70,4 +70,6 @@ export const BottomNav: React.FC<BottomNavProps> = ({
       </div>
     </div>
   );
-};
+});
+
+BottomNav.displayName = 'BottomNav';
