@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { PERFIS } from '@/data/perfis';
 import { BottomNav } from './BottomNav';
 
 interface ProfileMenuProps {
   onSelect: (key: string) => void;
   onViewList: () => void;
-  onBack: () => void;
+  onCadastro?: () => void;
   projetosCount: number;
 }
 
@@ -67,13 +67,18 @@ const ProfileIcons: Record<string, React.FC<{ className?: string }>> = {
   ),
 };
 
-export const ProfileMenu: React.FC<ProfileMenuProps> = ({ onSelect, onViewList, onBack, projetosCount }) => {
+export const ProfileMenu = forwardRef<HTMLDivElement, ProfileMenuProps>(({
+  onSelect,
+  onViewList,
+  onCadastro,
+  projetosCount
+}, ref) => {
   const perfilKeys = Object.keys(PERFIS);
   const featuredProfile = PERFIS['perfilC'];
   const FeaturedIcon = ProfileIcons['perfilC'];
 
   return (
-    <div className="app-container pb-24">
+    <div ref={ref} className="app-container pb-24">
       {/* Main Content Card */}
       <div className="content-card">
         {/* Header with featured profile */}
@@ -108,12 +113,11 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({ onSelect, onViewList, 
 
       {/* Bottom Navigation */}
       <BottomNav
-        onLogoClick={onBack}
-        leftAction={{
+        leftAction={onCadastro ? {
           label: 'Cadastro',
-          onClick: () => {},
+          onClick: onCadastro,
           variant: 'orange'
-        }}
+        } : undefined}
         rightAction={{
           label: 'Lista',
           onClick: onViewList,
@@ -123,4 +127,6 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({ onSelect, onViewList, 
       />
     </div>
   );
-};
+});
+
+ProfileMenu.displayName = 'ProfileMenu';

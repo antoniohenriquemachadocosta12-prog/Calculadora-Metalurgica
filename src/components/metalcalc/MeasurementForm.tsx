@@ -620,10 +620,9 @@ export const MeasurementForm: React.FC<MeasurementFormProps> = ({
 
       {/* Bottom Navigation */}
       <BottomNav
-        onLogoClick={onBack}
         leftAction={{
-          label: 'Repetir',
-          onClick: handleRepetir,
+          label: 'Voltar',
+          onClick: onBack,
           variant: 'orange'
         }}
         rightAction={{
