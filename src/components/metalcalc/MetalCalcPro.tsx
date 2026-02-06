@@ -38,7 +38,6 @@ export const MetalCalcPro: React.FC = () => {
         <ProfileMenu
           onSelect={(k) => { setPerfil(k); setScreen('form'); }}
           onViewList={() => setScreen('list')}
-          onBack={() => setScreen('splash')}
           projetosCount={projetos.length}
         />
       )}

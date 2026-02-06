@@ -110,7 +110,11 @@ export const ProjectList = forwardRef<HTMLDivElement, ProjectListProps>(({
 
       {/* Bottom Navigation */}
       <BottomNav
-        onLogoClick={onBack}
+        leftAction={{
+          label: 'Voltar',
+          onClick: onBack,
+          variant: 'orange'
+        }}
         showPdfButton={projetos.length > 0}
         onPdfClick={onPDF}
       />
