@@ -238,9 +238,27 @@ drawTable(
 // === PRECIFICACAO ===
 sectionTitle('5. PRECIFICACAO DO PROJETO COMPLETO');
 
-subTitle('Referencia por hora:');
+subTitle('Valor por hora em cada cenario (~185h):');
 drawTable(
-  ['Nivel', 'Valor/Hora', 'Total (185h media)'],
+  ['Cenario', 'Valor Total', 'Valor/Hora', 'Equivalente a'],
+  [
+    ['Cenario A', 'R$ 8.000', '~R$ 43/h', 'Abaixo de Junior'],
+    ['Cenario B', 'R$ 10.000', '~R$ 54/h', 'Junior'],
+    ['Cenario C', 'R$ 15.000', '~R$ 81/h', 'Pleno (inicio)'],
+  ],
+  {
+    columnStyles: { 0: { fontStyle: 'bold' }, 1: { fontStyle: 'bold' } },
+    didParseCell: (data) => {
+      if (data.section === 'body' && data.row.index === 2) {
+        data.cell.styles.fillColor = [255, 243, 224];
+      }
+    },
+  }
+);
+
+subTitle('Referencia de mercado:');
+drawTable(
+  ['Nivel', 'Valor/Hora mercado', 'Total (185h)'],
   [
     ['Junior (1-2 anos)', 'R$ 50 - 80/h', 'R$ 9.250 - R$ 14.800'],
     ['Pleno (3-5 anos)', 'R$ 80 - 150/h', 'R$ 14.800 - R$ 27.750'],
@@ -249,25 +267,7 @@ drawTable(
   { columnStyles: { 0: { fontStyle: 'bold' }, 2: { fontStyle: 'bold' } } }
 );
 
-subTitle('Preco fechado recomendado:');
-drawTable(
-  ['Faixa', 'Valor', 'Contexto'],
-  [
-    ['Minimo', 'R$ 12.000', 'Junior, ganhar experiencia'],
-    ['Justo', 'R$ 18.000 - R$ 25.000', 'Valor de mercado para este escopo'],
-    ['Premium', 'R$ 30.000 - R$ 35.000', 'Senior, entrega polida'],
-  ],
-  {
-    columnStyles: { 0: { fontStyle: 'bold' }, 1: { fontStyle: 'bold' } },
-    didParseCell: (data) => {
-      if (data.section === 'body' && data.row.index === 1) {
-        data.cell.styles.fillColor = [255, 243, 224];
-      }
-    },
-  }
-);
-
-highlightBox('RECOMENDACAO: R$ 20.000 a R$ 28.000 (preco fechado)', colors.orange, colors.white);
+paragraph('Nota: Mesmo o Cenario C (R$ 15k) esta abaixo do valor de mercado pleno. Os 3 cenarios representam condicoes especiais de negociacao.', { bold: true });
 
 // === CUSTOS FIXOS ===
 sectionTitle('6. CUSTOS FIXOS');
@@ -308,22 +308,32 @@ drawTable(
 // === PACOTES ===
 sectionTitle('8. SUGESTAO DE PACOTES PARA O CLIENTE');
 
-subTitle('Pacote Basico - R$ 20.000');
+subTitle('Cenario A - R$ 8.000 (valor amigavel, SEM contrato)');
 bulletPoint('App Android completo offline');
 bulletPoint('10 perfis metalurgicos com diagramas tecnicos');
-bulletPoint('Base de ate 150 materiais (fornecidos pelo cliente)');
-bulletPoint('Geracao de PDF profissional');
-bulletPoint('Compartilhamento via WhatsApp/email');
+bulletPoint('Base de materiais basica');
+bulletPoint('Geracao de PDF e compartilhamento');
 bulletPoint('Publicacao na Play Store');
-bulletPoint('30 dias de suporte pos-lancamento');
+bulletPoint('SEM participacao na startup');
+bulletPoint('SEM contrato formal de sociedade');
 
 y += 3;
-subTitle('Pacote Profissional - R$ 28.000');
-bulletPoint('Tudo do Basico +');
+subTitle('Cenario B - R$ 10.000 (valor reduzido + contrato formal)');
+bulletPoint('Tudo do Cenario A +');
+bulletPoint('Ate 150 materiais com busca e filtros');
+bulletPoint('Layout profissional do PDF');
+bulletPoint('30 dias de suporte pos-lancamento');
+bulletPoint('CONTRATO FORMAL de participacao na startup');
+bulletPoint('Percentual de equity definido em contrato');
+
+y += 3;
+subTitle('Cenario C - R$ 15.000 (valor fechado, sem startup)');
+bulletPoint('App completo com todas as funcionalidades');
 bulletPoint('Ate 250 materiais com busca inteligente e filtros');
 bulletPoint('Layout premium do PDF com logo do cliente');
 bulletPoint('60 dias de suporte pos-lancamento');
 bulletPoint('1 rodada de ajustes apos lancamento');
+bulletPoint('Sem vinculo com startup - entrega e encerra');
 
 y += 3;
 subTitle('Manutencao (opcional) - R$ 1.500/mes');
@@ -348,32 +358,33 @@ subTitle('3 Cenarios de Negociacao:');
 drawTable(
   ['', 'Cenario A', 'Cenario B', 'Cenario C'],
   [
-    ['Descricao', 'Valor amigavel puro', 'Valor reduzido + contrato', 'Valor cheio'],
-    ['Valor', 'R$ 8-12k', 'R$ 10-14k', 'R$ 20-28k'],
-    ['Contrato startup', 'Nao', 'Sim, formal', 'N/A'],
-    ['Equity', 'Promessa verbal', '10-20% escrito', '0%'],
+    ['Descricao', 'Valor amigavel', 'Valor + contrato startup', 'Valor fechado'],
+    ['Valor', 'R$ 8.000', 'R$ 10.000', 'R$ 15.000'],
+    ['Valor/hora', '~R$ 43/h', '~R$ 54/h', '~R$ 81/h'],
+    ['Contrato formal', 'Nao', 'Sim, com advogado', 'Contrato simples'],
+    ['Equity na startup', 'Nenhum', 'A definir (%)', '0%'],
+    ['Participacao futura', 'Promessa verbal', 'Garantida em contrato', 'Nenhuma'],
     ['Risco financeiro', 'ALTO', 'MODERADO', 'BAIXO'],
-    ['Potencial futuro', 'Incerto', 'Protegido', 'Nenhum'],
-    ['Recomendacao', 'EVITAR', 'MELHOR OPCAO', 'SEGURO'],
+    ['Recomendacao', 'EVITAR', 'NEGOCIAR', 'SEGURO'],
   ],
   {
     columnStyles: { 0: { fontStyle: 'bold', cellWidth: 35 } },
     didParseCell: (data) => {
-      if (data.section === 'body' && data.row.index === 6) {
+      if (data.section === 'body' && data.row.index === 7) {
         if (data.column.index === 1) {
           data.cell.styles.textColor = colors.red;
           data.cell.styles.fontStyle = 'bold';
         }
         if (data.column.index === 2) {
-          data.cell.styles.textColor = colors.green;
+          data.cell.styles.textColor = colors.yellow;
           data.cell.styles.fontStyle = 'bold';
         }
         if (data.column.index === 3) {
-          data.cell.styles.textColor = [41, 128, 185];
+          data.cell.styles.textColor = colors.green;
           data.cell.styles.fontStyle = 'bold';
         }
       }
-      if (data.section === 'body' && data.row.index === 4) {
+      if (data.section === 'body' && data.row.index === 6) {
         if (data.column.index === 1) data.cell.styles.textColor = colors.red;
         if (data.column.index === 2) data.cell.styles.textColor = colors.yellow;
         if (data.column.index === 3) data.cell.styles.textColor = colors.green;
@@ -382,24 +393,75 @@ drawTable(
   }
 );
 
-// === RECOMENDACAO ESTRATEGICA ===
-sectionTitle('10. RECOMENDACAO ESTRATEGICA');
+// === CONTRATO E PERCENTUAL ===
+sectionTitle('10. CONTRATO FORMAL - O QUE EXIGIR');
 
-highlightBox('Se voce ACREDITA na startup: Cenario B (R$ 12k + contrato com equity)', [39, 174, 96], colors.white);
+paragraph('Se optar pelo Cenario B (R$ 10k + participacao na startup), o contrato PRECISA conter:', { bold: true });
+y += 2;
 
-paragraph('Exija na negociacao:', { bold: true });
-bulletPoint('Contrato formal com advogado (escrito e assinado)');
-bulletPoint('Equity definido: 10-20% da startup, com vesting de 2 anos');
-bulletPoint('Valor minimo da calculadora: R$ 12.000 (nao menos)');
-bulletPoint('Clausula de CTO/dev principal para a fase 2 (marketplace)');
-bulletPoint('Deixar claro: o desconto dado e um INVESTIMENTO em forma de trabalho');
+subTitle('Clausulas obrigatorias no contrato:');
+bulletPoint('Identificacao completa das partes (CPF/CNPJ, endereco)');
+bulletPoint('Descricao detalhada do projeto: Calculadora do Serralheiro (escopo, funcionalidades)');
+bulletPoint('Valor: R$ 10.000 pelo desenvolvimento do app');
+bulletPoint('Reconhecimento formal: o desconto de R$ 5.000 a R$ 18.000 (diferenca do valor de mercado) e um INVESTIMENTO do desenvolvedor');
+
+y += 2;
+subTitle('Percentual de participacao (equity):');
+
+drawTable(
+  ['Percentual', 'Justificativa', 'Quando faz sentido'],
+  [
+    ['5%', 'Simbolico, cliente nao quer ceder muito', 'Se voce so quer manter a porta aberta'],
+    ['10%', 'Justo para o desconto dado', 'Equilibrio entre risco e recompensa'],
+    ['15%', 'Reflete o investimento real em trabalho', 'Se voce vai ser o dev principal da fase 2'],
+    ['20%+', 'Socio tecnico de fato', 'Se voce assume papel de CTO da startup'],
+  ],
+  {
+    columnStyles: { 0: { fontStyle: 'bold', halign: 'center', cellWidth: 25 } },
+    didParseCell: (data) => {
+      if (data.section === 'body' && data.row.index === 1) {
+        data.cell.styles.fillColor = [255, 243, 224];
+      }
+      if (data.section === 'body' && data.row.index === 2) {
+        data.cell.styles.fillColor = [232, 245, 233];
+      }
+    },
+  }
+);
+
+highlightBox('SUGESTAO: Pedir 10% a 15% com vesting de 2 anos', colors.orange, colors.white);
+
+paragraph('O que significa vesting de 2 anos:', { bold: true });
+bulletPoint('Voce NAO recebe os 10-15% de uma vez');
+bulletPoint('Recebe proporcionalmente ao longo de 24 meses (ex: ~0.5% por mes)');
+bulletPoint('Se a startup acabar no mes 6, voce tem direito a 1/4 do equity');
+bulletPoint('Protege ambos os lados: voce so ganha se continuar contribuindo');
+
+y += 2;
+subTitle('Outras clausulas importantes:');
+bulletPoint('Direito de preferencia: se o cliente vender a startup, voce tem prioridade de compra');
+bulletPoint('Clausula anti-diluicao: seu percentual nao pode ser diluido sem seu consentimento');
+bulletPoint('Papel definido na fase 2: desenvolvedor principal / CTO / consultor tecnico');
+bulletPoint('Propriedade intelectual: o codigo da calculadora e seu ate o pagamento integral');
+bulletPoint('Foro da comarca para resolucao de disputas');
 
 y += 4;
-highlightBox('Se voce TEM DUVIDAS: Cenario C (valor cheio R$ 20-28k)', [41, 128, 185], colors.white);
-paragraph('Dinheiro no bolso > promessa futura. Se a startup for boa de verdade, ele vai te procurar de novo. "Porta aberta" sem contrato nao vale desconto.');
+sectionTitle('11. RECOMENDACAO FINAL');
+
+highlightBox('Cenario B (R$ 10k + contrato com 10-15% equity) = MELHOR OPCAO se voce acredita no projeto', [39, 174, 96], colors.white);
+
+paragraph('Por que:', { bold: true });
+bulletPoint('Voce recebe R$ 10k agora (garante pagamento pelo trabalho)');
+bulletPoint('O contrato protege seu investimento de ~R$ 8-18k em trabalho');
+bulletPoint('Se a startup der certo, 10-15% de um marketplace pode valer muito');
+bulletPoint('Se nao der certo, voce pelo menos recebeu R$ 10k e tem o portfolio');
+
+y += 4;
+highlightBox('Cenario C (R$ 15k fechado) = OPCAO SEGURA se tiver duvidas', [41, 128, 185], colors.white);
+paragraph('Dinheiro no bolso > promessa futura. R$ 15k e um valor justo considerando a relacao com o cliente. Se a startup for boa de verdade, ele vai te procurar de novo para a fase 2.');
 
 // === RED FLAGS ===
-sectionTitle('11. BANDEIRAS VERMELHAS (Red Flags)');
+sectionTitle('12. BANDEIRAS VERMELHAS (Red Flags)');
 paragraph('Cuidado se o cliente:', { bold: true });
 bulletPoint('Recusa assinar qualquer tipo de contrato ou acordo');
 bulletPoint('Diz que "contrato e coisa de quem nao confia"');
@@ -410,7 +472,7 @@ bulletPoint('Pressiona muito para fechar rapido');
 
 // === VALOR PARA O SERRALHEIRO ===
 y += 4;
-sectionTitle('12. ARGUMENTOS DE VENDA');
+sectionTitle('13. ARGUMENTOS DE VENDA');
 paragraph('Valor que a calculadora entrega para o serralheiro:', { bold: true });
 bulletPoint('Velocidade: Orcamento em minutos, nao em horas');
 bulletPoint('Profissionalismo: PDF bonito impressiona o cliente');
