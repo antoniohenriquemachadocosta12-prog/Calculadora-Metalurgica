@@ -91,7 +91,7 @@ function tbl(h, r, o = {}) {
   y = doc.lastAutoTable.finalY + 8;
 }
 
-function box(text, bg, tc) {
+function box(text, bg, tc, center = false) {
   np(18);
   const lines = doc.splitTextToSize(text, cw - 16);
   const bh = lines.length * 6 + 10;
@@ -101,7 +101,14 @@ function box(text, bg, tc) {
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...tc);
   let ty = y + 8;
-  for (const l of lines) { doc.text(l, m + 8, ty); ty += 6; }
+  for (const l of lines) {
+    if (center) {
+      doc.text(l, m + cw / 2, ty, { align: 'center' });
+    } else {
+      doc.text(l, m + 8, ty);
+    }
+    ty += 6;
+  }
   y += bh + 6;
 }
 
@@ -136,7 +143,7 @@ doc.text('Calculadora do Serralheiro', W / 2, 68, { align: 'center' });
 
 doc.setFontSize(12);
 doc.setTextColor(...C.orange);
-doc.text('Aplicativo Android para Calculo e Orcamento Metalurgico', W / 2, 78, { align: 'center' });
+doc.text('Aplicativo Android para Calculo de Peso Metalurgico', W / 2, 78, { align: 'center' });
 
 // Info box central
 doc.setFillColor(35, 35, 55);
@@ -147,7 +154,7 @@ doc.setTextColor(200, 200, 200);
 const info = [
   ['Tipo:', 'Aplicativo Android Nativo (offline)'],
   ['Stack:', 'React 18 + TypeScript + Vite + Tailwind CSS'],
-  ['Funcionalidades:', '10 perfis metalurgicos | PDF profissional | Compartilhamento'],
+  ['Funcionalidades:', 'Ate 250 perfis | PDF profissional | Compartilhamento'],
   ['Plataforma:', 'Android (Google Play Store)'],
   ['Status:', 'MVP funcional em desenvolvimento'],
 ];
@@ -176,22 +183,22 @@ y = 20;
 
 sec('1. O PROJETO');
 
-p('A Calculadora do Serralheiro e um aplicativo Android 100% offline que permite ao profissional de serralheria calcular o peso e custo de perfis metalurgicos, gerar orcamentos em PDF profissional e compartilhar diretamente com clientes e fornecedores via WhatsApp ou email.');
+p('A Calculadora do Serralheiro e um aplicativo Android 100% offline que permite ao profissional de serralheria calcular o peso dos perfis metalurgicos, gerar o peso total em PDF profissional e compartilhar diretamente com clientes e fornecedores via WhatsApp ou email.');
 y += 2;
 
 sub('Problema que resolve:');
-bp('Serralheiros perdem tempo fazendo calculos manuais ou em planilhas improvisadas');
-bp('Orcamentos feitos "de cabeca" levam a erros de precificacao e prejuizo');
+bp('Serralheiros perdem tempo fazendo calculos manuais em papeis ou em planilhas improvisadas');
+bp('Calculos feitos "de cabeca" levam a erros de precificacao e prejuizo');
 bp('Falta de profissionalismo na apresentacao de orcamentos ao cliente');
 bp('Dificuldade de acesso a internet em obras e oficinas');
 
 y += 2;
 sub('Solucao entregue:');
-bp('Calculos automaticos e precisos para 10 tipos de perfis metalurgicos');
+bp('Calculos automaticos e precisos para ate 250 tipos de perfis metalurgicos');
 bp('Base com ate 250 materiais e precos atualizaveis');
 bp('PDF profissional gerado em segundos com dados da empresa');
 bp('Compartilhamento instantaneo (WhatsApp, Gmail, etc.)');
-bp('Funciona 100% sem internet - ideal para uso na obra');
+bp('Funciona 100% sem internet - a mensagem so sera enviada quando o usuario estiver conectado');
 
 // ============================================================
 // FUNCIONALIDADES DETALHADAS
@@ -203,50 +210,49 @@ sub('2.1 Perfis Metalurgicos (10 tipos)');
 p('Cada perfil possui diagrama tecnico SVG interativo e formulas de calculo especificas:');
 
 tbl(
-  ['Perfil', 'Medidas Necessarias', 'Uso Comum'],
+  ['Perfil', 'Medidas Necessarias'],
   [
-    ['Perfil "C"', 'Altura, largura, aba, espessura, comprimento', 'Estruturas, portoes, mezaninos'],
-    ['Perfil "U"', 'Altura, largura, espessura, comprimento', 'Guias, suportes, estruturas'],
-    ['Barra Quadrada', 'Lado, comprimento', 'Grades, portoes, detalhes'],
-    ['Barra Retangular', 'Largura, altura, comprimento', 'Estruturas, reforcos'],
-    ['Barra Redonda', 'Diametro, comprimento', 'Eixos, pinos, decoracao'],
-    ['Tubo Quadrado', 'Lado, espessura, comprimento', 'Estruturas, corrimaos'],
-    ['Tubo Retangular', 'Largura, altura, espessura, comprimento', 'Portoes, janelas, grades'],
-    ['Tubo Redondo', 'Diametro externo, espessura, comprimento', 'Corrimaos, estruturas tubulares'],
-    ['Cantoneira', 'Aba 1, aba 2, espessura, comprimento', 'Reforcos, cantos, suportes'],
-    ['Chapa', 'Largura, altura, espessura', 'Portoes, tampas, bases'],
+    ['Perfil "C"', 'Altura, largura, aba, espessura, comprimento'],
+    ['Perfil "U"', 'Altura, largura, espessura, comprimento'],
+    ['Barra Quadrada', 'Lado, comprimento'],
+    ['Barra Retangular', 'Largura, altura, comprimento'],
+    ['Barra Redonda', 'Diametro, comprimento'],
+    ['Tubo Quadrado', 'Lado, espessura, comprimento'],
+    ['Tubo Retangular', 'Largura, altura, espessura, comprimento'],
+    ['Tubo Redondo', 'Diametro externo, espessura, comprimento'],
+    ['Cantoneira', 'Aba 1, aba 2, espessura, comprimento'],
+    ['Chapa', 'Largura, altura, espessura'],
   ],
-  { cs: { 0: { fontStyle: 'bold', cellWidth: 35 }, 2: { cellWidth: 50 } } }
+  { cs: { 0: { fontStyle: 'bold', cellWidth: 45 } } }
 );
 
-sub('2.2 Materiais e Precos');
-p('Base de dados com densidade (kg/m3) e preco por kg para calculo automatico:');
+sub('2.2 Materiais');
+p('Base de dados com densidade (kg/m3) para calculo automatico de peso. A calculadora calcula apenas o peso dos materiais, nao gera orcamentos com valores financeiros.');
 
 tbl(
-  ['Material', 'Densidade (kg/m3)', 'Preco/kg', 'Aplicacao'],
+  ['Material', 'Densidade (kg/m3)', 'Categoria'],
   [
-    ['Aco Carbono 1020', '7.850', 'R$ 8,50', 'Uso geral, estruturas'],
-    ['Aco Carbono 1045', '7.850', 'R$ 9,20', 'Pecas mecanicas'],
-    ['Aco Inox 304', '8.000', 'R$ 28,00', 'Corrimaos, cozinha industrial'],
-    ['Aco Inox 316', '8.000', 'R$ 35,00', 'Ambientes corrosivos'],
-    ['Aluminio 6061', '2.700', 'R$ 22,00', 'Estruturas leves'],
-    ['Aluminio 6063', '2.700', 'R$ 20,00', 'Esquadrias, perfis'],
-    ['Cobre', '8.960', 'R$ 45,00', 'Barras condutoras'],
-    ['Latao', '8.500', 'R$ 38,00', 'Detalhes decorativos'],
-    ['Ferro Fundido', '7.200', 'R$ 6,50', 'Pecas pesadas, bases'],
+    ['Aco Carbono 1020', '7.850', 'Aco Carbono'],
+    ['Aco Carbono 1045', '7.850', 'Aco Carbono'],
+    ['Aco Inox 304', '8.000', 'Aco Inoxidavel'],
+    ['Aco Inox 316', '8.000', 'Aco Inoxidavel'],
+    ['Aluminio 6061', '2.700', 'Aluminio'],
+    ['Aluminio 6063', '2.700', 'Aluminio'],
+    ['Cobre', '8.960', 'Cobre'],
+    ['Latao', '8.500', 'Latao'],
+    ['Ferro Fundido', '7.200', 'Ferro Fundido'],
   ],
-  { cs: { 0: { fontStyle: 'bold', cellWidth: 35 }, 1: { halign: 'center' }, 2: { halign: 'center' } } }
+  { cs: { 0: { fontStyle: 'bold', cellWidth: 45 }, 1: { halign: 'center' }, 2: { halign: 'center' } } }
 );
 
-p('A base sera expandida para 100 a 250 materiais na versao final, com sistema de busca por texto e filtro por categoria.', { b: true });
+p('A base podera ser expandida em ate 250 materiais na versao final, com sistema de busca por texto e filtro por categoria.', { b: true });
 
 sub('2.3 Geracao de PDF Profissional');
-bp('Numero do orcamento gerado automaticamente');
-bp('Dados da empresa (nome, CNPJ) e do cliente');
-bp('Tabela detalhada: perfil, material, peso, valor unitario e total');
-bp('Layout com cores e logo da empresa');
-bp('Validade do orcamento configuravel');
-bp('Observacoes personalizadas');
+bp('Numero total de materiais e peso por item, gerado automaticamente no aparelho do cliente');
+bp('Tabela detalhada com: perfil, material, peso unitario e peso total');
+bp('Antes de gerar, o app solicita o nome do documento para organizacao');
+bp('Layout com cores e logo do aplicativo');
+bp('PDF gerado 100% offline, direto no celular');
 
 y += 2;
 sub('2.4 Compartilhamento Nativo');
@@ -360,7 +366,6 @@ tbl(
     ['Interface completa', 'Concluido', '4 telas com navegacao e design responsivo'],
     ['Geracao de PDF', 'Concluido', 'Orcamento profissional com tabela e totais'],
     ['Selecao de material', 'Concluido', '9 materiais com densidade e preco/kg'],
-    ['Dados empresa/cliente', 'Concluido', 'Modal para preencher dados do orcamento'],
   ],
   {
     cs: { 0: { fontStyle: 'bold', cellWidth: 45 }, 1: { halign: 'center', cellWidth: 28 } },
@@ -413,7 +418,7 @@ tbl(
   }
 );
 
-p('A estimativa considera: desenvolvimento, testes, ajustes de design, empacotamento e publicacao. Nao inclui tempo de resposta/feedback do cliente.', { c: C.med });
+p('A estimativa considera: desenvolvimento, testes, ajustes de design, empacotamento e publicacao. Nao inclui tempo de resposta e feedback do cliente.', { c: C.med });
 
 // ============================================================
 // VALORES E CENARIOS
@@ -427,13 +432,9 @@ tbl(
   [
     ['Cenario A', 'R$ 8.000', '~R$ 43/h', 'Abaixo de Junior'],
     ['Cenario B', 'R$ 10.000', '~R$ 54/h', 'Junior'],
-    ['Cenario C', 'R$ 15.000', '~R$ 81/h', 'Pleno (inicio)'],
   ],
   {
     cs: { 0: { fontStyle: 'bold' }, 1: { fontStyle: 'bold', halign: 'center' }, 2: { halign: 'center' }, 3: { halign: 'center' } },
-    dp: (data) => {
-      if (data.section === 'body' && data.row.index === 2) data.cell.styles.fillColor = [255, 243, 224];
-    },
   }
 );
 
@@ -448,7 +449,7 @@ tbl(
   { cs: { 0: { fontStyle: 'bold' }, 2: { fontStyle: 'bold' } } }
 );
 
-p('Observacao: Todos os 3 cenarios estao abaixo do valor de mercado pleno, representando condicoes especiais de negociacao.', { b: true });
+p('Importante: O valor de R$ 8.000 ja esta consideravelmente abaixo do preco praticado no mercado para um projeto deste porte. Os valores de referencia acima servem para demonstrar que esta proposta representa uma condicao especial e diferenciada. Mesmo assim, estou aberto a negociacao para encontrarmos o melhor caminho juntos.', { b: true });
 
 // ============================================================
 // DETALHAMENTO DOS CENARIOS
@@ -458,9 +459,9 @@ sec('8. DETALHAMENTO DOS CENARIOS');
 
 // CENARIO A
 doc.setFillColor(...C.cream);
-np(60);
-doc.roundedRect(m, y, cw, 55, 2, 2, 'F');
-doc.setFillColor(...C.red);
+np(80);
+doc.roundedRect(m, y, cw, 76, 2, 2, 'F');
+doc.setFillColor(...C.orange);
 doc.roundedRect(m, y, cw, 10, 2, 2, 'F');
 doc.rect(m, y + 8, cw, 2, 'F');
 doc.setTextColor(...C.white);
@@ -472,11 +473,14 @@ doc.setTextColor(...C.dark);
 doc.setFontSize(9);
 doc.setFont('helvetica', 'normal');
 const ceaItems = [
-  'App Android completo e funcional (10 perfis + calculo + PDF)',
-  'Base de materiais basica (9 materiais)',
+  'App Android completo e funcional (ate 250 perfis + calculo + PDF)',
+  'Ate 150 materiais com busca por texto e filtros por categoria',
+  'Layout premium do PDF com logo personalizado',
   'Publicacao na Google Play Store',
-  'Sem contrato de participacao futura',
-  'Sem suporte pos-lancamento incluso',
+  '30 dias de suporte e correcoes pos-lancamento',
+  '1 rodada de ajustes/melhorias apos lancamento',
+  'Papel de desenvolvedor principal na fase 2 (marketplace)',
+  'Contrato formal reconhecido e assinado digitalmente',
 ];
 for (const item of ceaItems) {
   doc.setFillColor(...C.orange);
@@ -488,9 +492,9 @@ y += 10;
 
 // CENARIO B
 doc.setFillColor(...C.cream);
-np(65);
-doc.roundedRect(m, y, cw, 62, 2, 2, 'F');
-doc.setFillColor(...C.orange);
+np(80);
+doc.roundedRect(m, y, cw, 76, 2, 2, 'F');
+doc.setFillColor(...C.green);
 doc.roundedRect(m, y, cw, 10, 2, 2, 'F');
 doc.rect(m, y + 8, cw, 2, 'F');
 doc.setTextColor(...C.white);
@@ -503,45 +507,15 @@ doc.setFontSize(9);
 doc.setFont('helvetica', 'normal');
 const cebItems = [
   'Tudo do Cenario A +',
-  'Ate 150 materiais com busca por texto e filtros por categoria',
-  'Layout profissional do PDF com dados da empresa',
-  '30 dias de suporte e correcoes pos-lancamento',
+  'Ate 250 materiais com busca inteligente e filtros avancados',
+  '60 dias de suporte e correcoes pos-lancamento',
+  '2 rodadas de ajustes/melhorias apos lancamento',
   'Contrato formal de participacao na startup (equity)',
   'Percentual de participacao definido em contrato (10-15%)',
   'Papel de desenvolvedor principal na fase 2 (marketplace)',
+  'Contrato formal reconhecido e assinado digitalmente',
 ];
 for (const item of cebItems) {
-  doc.setFillColor(...C.orange);
-  doc.circle(m + 6, y + 1.5, 0.8, 'F');
-  doc.text(item, m + 10, y + 2.5);
-  y += 6;
-}
-y += 10;
-
-// CENARIO C
-doc.setFillColor(...C.cream);
-np(65);
-doc.roundedRect(m, y, cw, 58, 2, 2, 'F');
-doc.setFillColor(...C.blue);
-doc.roundedRect(m, y, cw, 10, 2, 2, 'F');
-doc.rect(m, y + 8, cw, 2, 'F');
-doc.setTextColor(...C.white);
-doc.setFontSize(12);
-doc.setFont('helvetica', 'bold');
-doc.text('CENARIO C — R$ 15.000 (valor fechado)', m + 6, y + 7);
-y += 14;
-doc.setTextColor(...C.dark);
-doc.setFontSize(9);
-doc.setFont('helvetica', 'normal');
-const cecItems = [
-  'Tudo do Cenario A e B +',
-  'Ate 250 materiais com busca inteligente e filtros avancados',
-  'Layout premium do PDF com logo personalizado',
-  '60 dias de suporte e correcoes pos-lancamento',
-  '1 rodada de ajustes/melhorias apos lancamento',
-  'Sem vinculo com startup - entrega completa e encerra',
-];
-for (const item of cecItems) {
   doc.setFillColor(...C.orange);
   doc.circle(m + 6, y + 1.5, 0.8, 'F');
   doc.text(item, m + 10, y + 2.5);
@@ -567,7 +541,7 @@ tbl(
   { cs: { 0: { fontStyle: 'bold' }, 1: { halign: 'center', fontStyle: 'bold' }, 2: { halign: 'center' } } }
 );
 
-box('O app funciona 100% offline. Nao ha custo mensal de servidor, banco de dados ou infraestrutura.', C.green, C.white);
+box('O app funciona 100% offline. Nao ha custo mensal de servidor, banco de dados ou infraestrutura.', C.green, C.white, true);
 
 // ============================================================
 // MANUTENCAO
@@ -577,15 +551,14 @@ sec('10. MANUTENCAO POS-LANCAMENTO (opcional)');
 tbl(
   ['Servico', 'Valor Mensal', 'O que inclui'],
   [
-    ['Atualizacao de precos', 'R$ 500 - R$ 1.000', 'Atualizar tabela de precos dos materiais'],
-    ['Novos materiais/perfis', 'R$ 500 - R$ 1.000', 'Adicionar novos itens a base de dados'],
-    ['Correcoes + atualizacao', 'R$ 800 - R$ 1.500', 'Bugs, compatibilidade Android, melhorias'],
-    ['PACOTE COMPLETO', 'R$ 1.500/mes', 'Tudo acima incluso + suporte WhatsApp'],
+    ['Novos materiais/perfis', 'R$ 150', 'Adicionar novos itens a base de dados'],
+    ['Correcoes + atualizacao', 'R$ 250', 'Bugs, compatibilidade Android, melhorias'],
+    ['PACOTE COMPLETO', 'R$ 400/mes', 'Tudo acima incluso + suporte WhatsApp'],
   ],
   {
     cs: { 0: { fontStyle: 'bold' }, 1: { halign: 'center', fontStyle: 'bold' } },
     dp: (data) => {
-      if (data.section === 'body' && data.row.index === 3) {
+      if (data.section === 'body' && data.row.index === 2) {
         data.cell.styles.fillColor = [255, 243, 224];
         data.cell.styles.fontStyle = 'bold';
       }
@@ -601,10 +574,10 @@ sec('11. CRONOGRAMA DE ENTREGA');
 tbl(
   ['Semana', 'Entrega', 'Marcos'],
   [
-    ['Semana 1-2', 'Empacotamento Android + base de materiais', 'Primeira versao rodando no celular'],
-    ['Semana 3', 'Compartilhamento + modo offline', 'App funcional completo'],
-    ['Semana 4-5', 'QA em dispositivos + ajustes', 'Testes em 5+ aparelhos reais'],
-    ['Semana 6', 'Publicacao na Play Store', 'App disponivel para download'],
+    ['Semana 1-4', 'Empacotamento Android + base de materiais', 'Primeira versao rodando no celular'],
+    ['Semana 5', 'Compartilhamento + modo offline', 'App funcional completo'],
+    ['Semana 6-7', 'QA em dispositivos + ajustes', 'Testes em 5+ aparelhos reais'],
+    ['Semana 8', 'Publicacao na Play Store', 'App disponivel para download'],
   ],
   {
     cs: { 0: { fontStyle: 'bold', halign: 'center', cellWidth: 28 }, 2: { cellWidth: 55 } },
@@ -617,7 +590,7 @@ tbl(
   }
 );
 
-p('Prazo total estimado: 4 a 6 semanas apos aprovacao da proposta.', { b: true });
+p('Prazo total estimado: 7 a 8 semanas apos aprovacao da proposta.', { b: true });
 p('O prazo pode variar dependendo do tempo de feedback e aprovacoes do cliente.', { c: C.med });
 
 // ============================================================
@@ -629,12 +602,12 @@ p('O que o serralheiro ganha usando a Calculadora do Serralheiro:');
 y += 2;
 
 const valores = [
-  ['Velocidade', 'Orcamento pronto em 2 minutos, nao em 30 minutos. Mais orcamentos = mais vendas.'],
-  ['Precisao', 'Calculos automaticos eliminam erros de conta. Sem prejuizo por erro de precificacao.'],
-  ['Profissionalismo', 'PDF bonito e organizado impressiona o cliente. Passa confianca e seriedade.'],
+  ['Velocidade', 'Lista de materiais e peso total da lista pronta em menos de 5 minutos, nao em 30 minutos.'],
+  ['Precisao', 'Calculos automaticos eliminam erros de conta. Sem prejuizo por erro de calculos errados.'],
+  ['Profissionalismo', 'PDF bonito e organizado impressiona o cliente (caso queira comprar os materiais). Passa confianca, profissionalismo e seriedade, otimizado para vendedores e orcamento gerado com mais velocidade.'],
   ['Praticidade', 'Funciona na obra, no carro, na oficina. Sem internet, sem complicacao.'],
-  ['Agilidade', 'Envia orcamento pro cliente na hora pelo WhatsApp. Fecha negocio mais rapido.'],
-  ['Organizacao', 'Todos os itens do orcamento organizados com peso e valor calculados.'],
+  ['Agilidade', 'Envia a lista pro cliente na hora pelo WhatsApp. Fecha negocio mais rapido.'],
+  ['Organizacao', 'Todos os itens do orcamento organizados com peso calculados.'],
 ];
 
 for (const [titulo, desc] of valores) {
@@ -662,8 +635,8 @@ bp('Proposta valida por 15 dias a partir da data deste documento');
 bp('Pagamento: 50% na aprovacao + 50% na entrega publicada na Play Store');
 bp('Alteracoes de escopo apos aprovacao serao orcadas separadamente');
 bp('O codigo-fonte sera entregue ao cliente apos pagamento integral');
-bp('Prazo de entrega: 4 a 6 semanas apos aprovacao');
-bp('Suporte pos-lancamento conforme cenario escolhido');
+bp('Prazo de entrega: 7 a 8 semanas apos aprovacao');
+bp('Suporte pos-lancamento incluso conforme cenario escolhido');
 
 y += 4;
 divider();
