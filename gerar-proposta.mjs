@@ -431,7 +431,7 @@ sub('Valor por hora em cada cenario (~185h de trabalho):');
 tbl(
   ['Cenario', 'Investimento', 'Valor/Hora', 'Equivalente'],
   [
-    ['Cenario A', 'R$ 8.000', '~R$ 43/h', 'Abaixo de Junior'],
+    ['Cenario A', 'R$ 6.000', '~R$ 32/h', 'Abaixo de Junior'],
     ['Cenario B', 'R$ 10.000', '~R$ 54/h', 'Junior'],
   ],
   {
@@ -450,7 +450,7 @@ tbl(
   { cs: { 0: { fontStyle: 'bold' }, 2: { fontStyle: 'bold' } } }
 );
 
-p('Importante: O valor de R$ 8.000 ja esta consideravelmente abaixo do preco praticado no mercado para um projeto deste porte. Os valores de referencia acima servem para demonstrar que esta proposta representa uma condicao especial e diferenciada. Mesmo assim, estou aberto a negociacao para encontrarmos o melhor caminho juntos.', { b: true });
+p('Importante: O valor de R$ 6.000 ja esta consideravelmente abaixo do preco praticado no mercado para um projeto deste porte. Os valores de referencia acima servem para demonstrar que esta proposta representa uma condicao especial e diferenciada. Mesmo assim, estou aberto a negociacao para encontrarmos o melhor caminho juntos.', { b: true });
 
 // ============================================================
 // DETALHAMENTO DOS CENARIOS
@@ -468,7 +468,7 @@ doc.rect(m, y + 8, cw, 2, 'F');
 doc.setTextColor(...C.white);
 doc.setFontSize(12);
 doc.setFont('helvetica', 'bold');
-doc.text('CENARIO A — R$ 8.000', m + 6, y + 7);
+doc.text('CENARIO A — R$ 6.000', m + 6, y + 7);
 y += 14;
 doc.setTextColor(...C.dark);
 doc.setFontSize(9);
