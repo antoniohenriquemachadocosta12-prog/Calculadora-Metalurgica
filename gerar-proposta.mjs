@@ -189,14 +189,14 @@ y += 2;
 sub('Problema que resolve:');
 bp('Serralheiros perdem tempo fazendo calculos manuais em papeis ou em planilhas improvisadas');
 bp('Calculos feitos "de cabeca" levam a erros de precificacao e prejuizo');
-bp('Falta de profissionalismo na apresentacao de orcamentos ao cliente');
+bp('Falta de profissionalismo na apresentacao da lista de materiais ao cliente');
 bp('Dificuldade de acesso a internet em obras e oficinas');
 
 y += 2;
 sub('Solucao entregue:');
 bp('Calculos automaticos e precisos para ate 250 tipos de perfis metalurgicos');
 bp('Base com ate 250 materiais e precos atualizaveis');
-bp('PDF profissional gerado em segundos com dados da empresa');
+bp('PDF profissional gerado em segundos com a lista de materiais e nome do aplicativo');
 bp('Compartilhamento instantaneo (WhatsApp, Gmail, etc.)');
 bp('Funciona 100% sem internet - a mensagem so sera enviada quando o usuario estiver conectado');
 
@@ -248,10 +248,11 @@ tbl(
 p('A base podera ser expandida em ate 250 materiais na versao final, com sistema de busca por texto e filtro por categoria.', { b: true });
 
 sub('2.3 Geracao de PDF Profissional');
-bp('Numero total de materiais e peso por item, gerado automaticamente no aparelho do cliente');
+bp('Lista de materiais com numero total de itens e peso por item');
 bp('Tabela detalhada com: perfil, material, peso unitario e peso total');
 bp('Antes de gerar, o app solicita o nome do documento para organizacao');
-bp('Layout com cores e logo do aplicativo');
+bp('Layout com cores e logo do aplicativo (sem dados pessoais do usuario)');
+bp('O PDF contem apenas a lista de materiais e a marca do aplicativo');
 bp('PDF gerado 100% offline, direto no celular');
 
 y += 2;
@@ -364,7 +365,7 @@ tbl(
     ['10 perfis metalurgicos', 'Concluido', 'Formulas + diagramas SVG interativos'],
     ['Sistema de calculo', 'Concluido', 'Peso e valor automaticos por material'],
     ['Interface completa', 'Concluido', '4 telas com navegacao e design responsivo'],
-    ['Geracao de PDF', 'Concluido', 'Orcamento profissional com tabela e totais'],
+    ['Geracao de PDF', 'Concluido', 'Lista de materiais profissional com tabela e totais'],
     ['Selecao de material', 'Concluido', '9 materiais com densidade e preco/kg'],
   ],
   {
@@ -604,10 +605,10 @@ y += 2;
 const valores = [
   ['Velocidade', 'Lista de materiais e peso total da lista pronta em menos de 5 minutos, nao em 30 minutos.'],
   ['Precisao', 'Calculos automaticos eliminam erros de conta. Sem prejuizo por erro de calculos errados.'],
-  ['Profissionalismo', 'PDF bonito e organizado impressiona o cliente (caso queira comprar os materiais). Passa confianca, profissionalismo e seriedade, otimizado para vendedores e orcamento gerado com mais velocidade.'],
+  ['Profissionalismo', 'PDF bonito e organizado impressiona o cliente (caso queira comprar os materiais). Passa confianca, profissionalismo e seriedade, otimizado para vendedores e lista de materiais gerada com mais velocidade.'],
   ['Praticidade', 'Funciona na obra, no carro, na oficina. Sem internet, sem complicacao.'],
   ['Agilidade', 'Envia a lista pro cliente na hora pelo WhatsApp. Fecha negocio mais rapido.'],
-  ['Organizacao', 'Todos os itens do orcamento organizados com peso calculados.'],
+  ['Organizacao', 'Todos os itens da lista de materiais organizados com peso calculados.'],
 ];
 
 for (const [titulo, desc] of valores) {
@@ -632,7 +633,7 @@ y += 4;
 sec('13. CONDICOES GERAIS');
 
 bp('Proposta valida por 15 dias a partir da data deste documento');
-bp('Pagamento: 50% na aprovacao + 50% na entrega publicada na Play Store');
+bp('Pagamento: 50% na aprovacao + 50% na entrega publicada na Play Store, ou parcelado em 4 vezes');
 bp('Alteracoes de escopo apos aprovacao serao orcadas separadamente');
 bp('O codigo-fonte sera entregue ao cliente apos pagamento integral');
 bp('Prazo de entrega: 7 a 8 semanas apos aprovacao');
