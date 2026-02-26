@@ -303,7 +303,7 @@ clausula('9a', 'DA CONFIDENCIALIDADE');
 
 item('9.1', 'As partes se comprometem a manter sigilo sobre todas as informacoes tecnicas, comerciais e estrategicas trocadas durante a vigencia deste contrato.');
 
-item('9.2', 'A obrigacao de confidencialidade permanecera vigente por 2 (dois) anos apos o termino deste contrato.');
+item('9.2', 'A obrigacao de confidencialidade permanecera vigente por tempo indeterminado, mesmo apos o termino deste contrato.');
 
 item('9.3', 'Nao serao consideradas confidenciais as informacoes que sejam de dominio publico ou que devam ser divulgadas por forca de lei ou decisao judicial.');
 
