@@ -361,7 +361,7 @@ doc.setLineWidth(0.5);
 doc.line(m, y, W - m, y);
 y += 8;
 
-para('E por estarem assim justas e contratadas, as partes assinam o presente instrumento em 2 (duas) vias de igual teor e forma, na presenca de 2 (duas) testemunhas.', { size: 9 });
+para('E por estarem assim justas e contratadas, as partes assinam o presente instrumento em 2 (duas) vias de igual teor e forma.', { size: 9 });
 
 y += 4;
 para('Local: _________________________________, Data: ____/____/2026', { size: 9 });
@@ -393,29 +393,6 @@ doc.text('Nome: ___________________________________', W - m - 72, y + 9);
 doc.text('CPF/CNPJ: _______________________________', W - m - 72, y + 14);
 
 y += 24;
-
-// Testemunhas
-np(30);
-doc.setFontSize(9);
-doc.setFont('helvetica', 'bold');
-doc.setTextColor(...C.navy);
-doc.text('TESTEMUNHAS:', m, y + 3);
-y += 10;
-
-doc.setDrawColor(...C.dark);
-doc.line(m, y, m + 72, y);
-y += 5;
-doc.setFontSize(8);
-doc.setFont('helvetica', 'normal');
-doc.setTextColor(...C.dark);
-doc.text('Testemunha 1', m, y + 3);
-doc.text('Nome: ___________________________________', m, y + 9);
-doc.text('CPF: ____________________________________', m, y + 14);
-
-doc.line(W - m - 72, y - 5, W - m, y - 5);
-doc.text('Testemunha 2', W - m - 72, y + 3);
-doc.text('Nome: ___________________________________', W - m - 72, y + 9);
-doc.text('CPF: ____________________________________', W - m - 72, y + 14);
 
 // ============================================================
 // FOOTERS
