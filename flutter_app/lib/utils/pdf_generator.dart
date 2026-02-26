@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -16,6 +17,8 @@ class PdfGenerator {
   static const _medium = PdfColor.fromInt(0xFF505050);
   static const _cream = PdfColor.fromInt(0xFFEBE4D9);
   static const _white = PdfColor.fromInt(0xFFFFFFFF);
+
+  static const _orangeColor = Color(0xFFE85D04);
 
   /// Gera PDF e abre modal de compartilhamento
   static Future<void> gerarECompartilhar({
@@ -54,15 +57,15 @@ class PdfGenerator {
               ),
               const SizedBox(height: 16),
               ListTile(
-                leading: const Icon(Icons.visibility, color: _orangeFlutter),
+                leading: const Icon(Icons.visibility, color: _orangeColor),
                 title: const Text('Visualizar PDF'),
                 onTap: () {
                   Navigator.pop(ctx);
-                  _visualizar(context, bytes, fileName);
+                  _visualizar(context, Uint8List.fromList(bytes), fileName);
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.share, color: _orangeFlutter),
+                leading: const Icon(Icons.share, color: _orangeColor),
                 title: const Text('Compartilhar'),
                 subtitle: const Text('WhatsApp, Gmail, Telegram...'),
                 onTap: () {
@@ -74,11 +77,12 @@ class PdfGenerator {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.print, color: _orangeFlutter),
+                leading: const Icon(Icons.print, color: _orangeColor),
                 title: const Text('Imprimir'),
                 onTap: () {
                   Navigator.pop(ctx);
-                  Printing.layoutPdf(onLayout: (_) => bytes);
+                  Printing.layoutPdf(
+                      onLayout: (_) async => Uint8List.fromList(bytes));
                 },
               ),
             ],
@@ -88,16 +92,14 @@ class PdfGenerator {
     );
   }
 
-  static const _orangeFlutter = Color(0xFFE85D04);
-
   static void _visualizar(
-      BuildContext context, List<int> bytes, String title) {
+      BuildContext context, Uint8List bytes, String title) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => Scaffold(
           appBar: AppBar(title: Text(title)),
           body: PdfPreview(
-            build: (_) => bytes as dynamic,
+            build: (_) async => bytes,
             canChangeOrientation: false,
             canChangePageFormat: false,
             canDebug: false,
@@ -138,47 +140,31 @@ class PdfGenerator {
           pw.SizedBox(height: 12),
 
           // Tabela de materiais
-          pw.Table(
+          pw.TableHelper.fromTextArray(
+            context: context,
             border: pw.TableBorder.all(color: _navy, width: 0.5),
-            columnWidths: {
-              0: const pw.FlexColumnWidth(0.5),
-              1: const pw.FlexColumnWidth(2),
-              2: const pw.FlexColumnWidth(2),
-              3: const pw.FlexColumnWidth(0.6),
-              4: const pw.FlexColumnWidth(1.2),
-              5: const pw.FlexColumnWidth(1.2),
-            },
-            children: [
-              // Header
-              pw.TableRow(
-                decoration: const pw.BoxDecoration(color: _navy),
-                children: [
-                  _th('#'),
-                  _th('Perfil'),
-                  _th('Material'),
-                  _th('Qtd'),
-                  _th('Peso (kg)'),
-                  _th('Valor (R\$)'),
-                ],
-              ),
-              // Rows
-              ...projetos.asMap().entries.map((entry) {
-                final i = entry.key;
-                final p = entry.value;
-                final bg = i % 2 == 0 ? _cream : _white;
-                return pw.TableRow(
-                  decoration: pw.BoxDecoration(color: bg),
-                  children: [
-                    _td('${i + 1}'),
-                    _td(p.nomePerfil),
-                    _td(p.material.nome, fontSize: 7),
-                    _td('${p.quantidade}'),
-                    _td(p.resultado.pesoTotal.toStringAsFixed(3)),
-                    _td(p.resultado.valorTotal.toStringAsFixed(2)),
-                  ],
-                );
-              }),
-            ],
+            headerStyle: pw.TextStyle(
+              color: _white,
+              fontSize: 8,
+              fontWeight: pw.FontWeight.bold,
+            ),
+            headerDecoration: const pw.BoxDecoration(color: _navy),
+            cellStyle: const pw.TextStyle(fontSize: 8, color: _dark),
+            cellAlignment: pw.Alignment.center,
+            cellPadding: const pw.EdgeInsets.all(5),
+            headers: ['#', 'Perfil', 'Material', 'Qtd', 'Peso (kg)', 'Valor (R\$)'],
+            data: projetos.asMap().entries.map((entry) {
+              final i = entry.key;
+              final p = entry.value;
+              return [
+                '${i + 1}',
+                p.nomePerfil,
+                p.material.nome,
+                '${p.quantidade}',
+                p.resultado.pesoTotal.toStringAsFixed(3),
+                p.resultado.valorTotal.toStringAsFixed(2),
+              ];
+            }).toList(),
           ),
 
           pw.SizedBox(height: 12),
@@ -342,32 +328,6 @@ class PdfGenerator {
             pw.Text('Tel: ${cliente.telefone}',
                 style: const pw.TextStyle(fontSize: 8)),
         ],
-      ),
-    );
-  }
-
-  static pw.Widget _th(String text) {
-    return pw.Container(
-      padding: const pw.EdgeInsets.all(6),
-      child: pw.Text(
-        text,
-        style: pw.TextStyle(
-          color: _white,
-          fontSize: 8,
-          fontWeight: pw.FontWeight.bold,
-        ),
-        textAlign: pw.TextAlign.center,
-      ),
-    );
-  }
-
-  static pw.Widget _td(String text, {double fontSize = 8}) {
-    return pw.Container(
-      padding: const pw.EdgeInsets.all(5),
-      child: pw.Text(
-        text,
-        style: pw.TextStyle(color: _dark, fontSize: fontSize),
-        textAlign: pw.TextAlign.center,
       ),
     );
   }

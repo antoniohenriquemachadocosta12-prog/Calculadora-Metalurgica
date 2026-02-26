@@ -148,7 +148,7 @@ class _MaterialSelectorScreenState extends State<MaterialSelectorScreen> {
       child: FilterChip(
         label: Text(
           label,
-          style: TextStyle(fontSize: 11),
+          style: const TextStyle(fontSize: 11),
         ),
         selected: selected,
         selectedColor: AppColors.primary,

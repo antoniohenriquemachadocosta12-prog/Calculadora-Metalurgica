@@ -69,7 +69,7 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(
+                    const Text(
                       'DO SERRALHEIRO',
                       style: TextStyle(
                         color: AppColors.primary,
@@ -78,7 +78,7 @@ class _SplashScreenState extends State<SplashScreen>
                         letterSpacing: 4,
                         shadows: [
                           Shadow(
-                            color: AppColors.primary.withOpacity(0.4),
+                            color: Color.fromRGBO(232, 93, 4, 0.4),
                             blurRadius: 8,
                           ),
                         ],
@@ -104,10 +104,10 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                     ),
                     const SizedBox(height: 60),
-                    Text(
+                    const Text(
                       'v1.0.0',
                       style: TextStyle(
-                        color: AppColors.white.withOpacity(0.4),
+                        color: Color.fromRGBO(255, 255, 255, 0.4),
                         fontSize: 12,
                       ),
                     ),

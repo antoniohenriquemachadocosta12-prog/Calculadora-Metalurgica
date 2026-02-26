@@ -92,22 +92,22 @@ class _ProjectListScreenState extends State<ProjectListScreen> {
         ],
       ),
       body: widget.projetos.isEmpty
-          ? Center(
+          ? const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.inbox_outlined,
                       size: 64, color: AppColors.light),
-                  const SizedBox(height: 16),
-                  const Text(
+                  SizedBox(height: 16),
+                  Text(
                     'Lista vazia',
                     style: TextStyle(
                       fontSize: 18,
                       color: AppColors.medium,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
+                  SizedBox(height: 8),
+                  Text(
                     'Adicione perfis a partir do menu principal',
                     style: TextStyle(
                       fontSize: 13,

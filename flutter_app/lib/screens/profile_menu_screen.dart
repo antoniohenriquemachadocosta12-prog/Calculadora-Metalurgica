@@ -67,12 +67,12 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
+        title: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const LogoWidget(size: LogoSize.sm),
-            const SizedBox(width: 10),
-            const Text(
+            LogoWidget(size: LogoSize.sm),
+            SizedBox(width: 10),
+            Text(
               'Calculadora do Serralheiro',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
