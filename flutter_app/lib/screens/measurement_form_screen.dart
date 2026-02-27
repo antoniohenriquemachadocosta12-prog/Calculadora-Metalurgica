@@ -5,6 +5,7 @@ import '../models/material_model.dart';
 import '../models/projeto_model.dart';
 import '../data/materiais.dart';
 import '../utils/calculos.dart';
+import '../widgets/perfil_diagram.dart';
 import 'material_selector_screen.dart';
 
 class MeasurementFormScreen extends StatefulWidget {
@@ -145,18 +146,18 @@ class _MeasurementFormScreenState extends State<MeasurementFormScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Ícone do perfil
+            // Diagrama técnico do perfil
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppColors.cream,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: AppColors.navy, width: 1.5),
               ),
               child: Center(
-                child: Text(
-                  widget.perfil.icone,
-                  style: const TextStyle(fontSize: 56),
+                child: PerfilDiagram(
+                  perfilId: widget.perfil.id,
+                  size: 140,
                 ),
               ),
             ),

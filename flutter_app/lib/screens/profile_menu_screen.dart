@@ -3,6 +3,8 @@ import '../theme/app_theme.dart';
 import '../models/perfil_model.dart';
 import '../models/projeto_model.dart';
 import '../widgets/logo_widget.dart';
+import '../widgets/perfil_diagram.dart';
+import '../services/storage_service.dart';
 import 'measurement_form_screen.dart';
 import 'project_list_screen.dart';
 
@@ -15,9 +17,10 @@ class ProfileMenuScreen extends StatefulWidget {
 
 class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
   final List<Projeto> _projetos = [];
-  final EmpresaInfo _empresa = EmpresaInfo();
-  final ClienteInfo _cliente = ClienteInfo();
+  EmpresaInfo _empresa = EmpresaInfo();
+  ClienteInfo _cliente = ClienteInfo();
   String? _categoriaFiltro;
+  bool _carregando = true;
 
   Map<String, List<PerfilMetal>> get _perfisPorCategoria =>
       PerfilFactory.porCategoria();
@@ -27,6 +30,32 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
   List<PerfilMetal> get _perfisFiltrados {
     if (_categoriaFiltro == null) return PerfilFactory.todos();
     return _perfisPorCategoria[_categoriaFiltro] ?? [];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _carregarDados();
+  }
+
+  Future<void> _carregarDados() async {
+    final projetos = await StorageService.carregarProjetos();
+    final empresa = await StorageService.carregarEmpresa();
+    final cliente = await StorageService.carregarCliente();
+    if (mounted) {
+      setState(() {
+        _projetos.addAll(projetos);
+        _empresa = empresa;
+        _cliente = cliente;
+        _carregando = false;
+      });
+    }
+  }
+
+  Future<void> _salvar() async {
+    await StorageService.salvarProjetos(_projetos);
+    await StorageService.salvarEmpresa(_empresa);
+    await StorageService.salvarCliente(_cliente);
   }
 
   void _selecionarPerfil(PerfilMetal perfil) {
@@ -39,6 +68,7 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
           cliente: _cliente,
           onProjetoAdicionado: (projeto) {
             setState(() => _projetos.add(projeto));
+            _salvar();
           },
         ),
       ),
@@ -54,9 +84,11 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
           cliente: _cliente,
           onRemover: (index) {
             setState(() => _projetos.removeAt(index));
+            _salvar();
           },
           onLimpar: () {
             setState(() => _projetos.clear());
+            _salvar();
           },
         ),
       ),
@@ -89,43 +121,47 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
             ),
         ],
       ),
-      body: Column(
-        children: [
-          // Filtro por categoria
-          Container(
-            color: AppColors.cream,
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  _buildCategoriaChip(null, 'Todos'),
-                  ..._categorias.map((c) => _buildCategoriaChip(c, c)),
-                ],
-              ),
-            ),
-          ),
-          // Grid de perfis
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1.4,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
+      body: _carregando
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+              children: [
+                // Filtro por categoria
+                Container(
+                  color: AppColors.cream,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        _buildCategoriaChip(null, 'Todos'),
+                        ..._categorias.map((c) => _buildCategoriaChip(c, c)),
+                      ],
+                    ),
+                  ),
                 ),
-                itemCount: _perfisFiltrados.length,
-                itemBuilder: (context, index) {
-                  final perfil = _perfisFiltrados[index];
-                  return _buildPerfilCard(perfil);
-                },
-              ),
+                // Grid de perfis
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 1.1,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                      ),
+                      itemCount: _perfisFiltrados.length,
+                      itemBuilder: (context, index) {
+                        final perfil = _perfisFiltrados[index];
+                        return _buildPerfilCard(perfil);
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
       bottomNavigationBar: _projetos.isNotEmpty
           ? Container(
               color: AppColors.navy,
@@ -168,15 +204,17 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
         onTap: () => _selecionarPerfil(perfil),
         borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                perfil.icone,
-                style: const TextStyle(fontSize: 28),
+              Expanded(
+                child: PerfilDiagram(
+                  perfilId: perfil.id,
+                  size: 80,
+                ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               Text(
                 perfil.nome,
                 textAlign: TextAlign.center,
