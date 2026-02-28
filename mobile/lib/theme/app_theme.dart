@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
-  static const Color cream = Color(0xFFF5F0E8);
-  static const Color navy = Color(0xFF1B2B4B);
-  static const Color orange = Color(0xFFE07B39);
-  static const Color teal = Color(0xFF2A9D8F);
-  static const Color lightGray = Color(0xFFF8F8F8);
-  static const Color darkGray = Color(0xFF4A4A4A);
+  static const Color cream = Color(0xFFF4F6FA);     // cinza-azulado suave
+  static const Color navy = Color(0xFF1A2845);       // azul noite profundo
+  static const Color navyLight = Color(0xFF243660);  // navy secundário
+  static const Color orange = Color(0xFFE8763A);     // laranja vibrante
+  static const Color teal = Color(0xFF2BB5A4);       // teal vivo
+  static const Color lightGray = Color(0xFFF8F9FB);
+  static const Color darkGray = Color(0xFF5A6070);
   static const Color white = Color(0xFFFFFFFF);
-  static const Color borderGray = Color(0xFFE0E0E0);
+  static const Color borderGray = Color(0xFFE4E8F0);
+  static const Color success = Color(0xFF27AE60);
+  static const Color purple = Color(0xFF8B5CF6);
 }
 
 class AppTheme {
@@ -109,10 +112,15 @@ class AppTheme {
       ),
       cardTheme: CardTheme(
         color: AppColors.white,
-        elevation: 2,
+        elevation: 0,
+        shadowColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(14),
+          side: const BorderSide(color: AppColors.borderGray),
         ),
+      ),
+      scrollbarTheme: const ScrollbarThemeData(
+        thumbVisibility: WidgetStatePropertyAll(false),
       ),
     );
   }
