@@ -1,0 +1,305 @@
+import '../models/perfil_metal.dart';
+
+const List<PerfilMetal> perfis = [
+  // ── Perfis Estruturais ──────────────────────────────────────────────────────
+  PerfilMetal(
+    id: 'cantoneira_igual',
+    nome: 'Cantoneira de Abas Iguais',
+    categoria: 'Estrutural',
+    descricao: 'Perfil L com abas de mesma dimensão',
+    icone: 'L',
+    campos: [
+      CampoMedida(id: 'aba', label: 'Aba (A)', unidade: 'mm', hint: 'ex: 50'),
+      CampoMedida(id: 'espessura', label: 'Espessura (e)', unidade: 'mm', hint: 'ex: 5'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento', unidade: 'm', hint: 'ex: 6'),
+    ],
+  ),
+  PerfilMetal(
+    id: 'cantoneira_desigual',
+    nome: 'Cantoneira de Abas Desiguais',
+    categoria: 'Estrutural',
+    descricao: 'Perfil L com abas de dimensões diferentes',
+    icone: 'L',
+    campos: [
+      CampoMedida(id: 'aba_a', label: 'Aba A', unidade: 'mm', hint: 'ex: 76'),
+      CampoMedida(id: 'aba_b', label: 'Aba B', unidade: 'mm', hint: 'ex: 50'),
+      CampoMedida(id: 'espessura', label: 'Espessura (e)', unidade: 'mm', hint: 'ex: 6'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento', unidade: 'm', hint: 'ex: 6'),
+    ],
+  ),
+  PerfilMetal(
+    id: 'perfil_i',
+    nome: 'Perfil I (Viga)',
+    categoria: 'Estrutural',
+    descricao: 'Viga I / H para estruturas',
+    icone: 'I',
+    campos: [
+      CampoMedida(id: 'altura', label: 'Altura (H)', unidade: 'mm', hint: 'ex: 200'),
+      CampoMedida(id: 'mesa', label: 'Largura Mesa (B)', unidade: 'mm', hint: 'ex: 100'),
+      CampoMedida(id: 'alma', label: 'Esp. Alma (tw)', unidade: 'mm', hint: 'ex: 7'),
+      CampoMedida(id: 'mesa_esp', label: 'Esp. Mesa (tf)', unidade: 'mm', hint: 'ex: 11'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento', unidade: 'm', hint: 'ex: 9'),
+    ],
+  ),
+  PerfilMetal(
+    id: 'perfil_h',
+    nome: 'Perfil H (Coluna)',
+    categoria: 'Estrutural',
+    descricao: 'Perfil H para colunas e pilares',
+    icone: 'H',
+    campos: [
+      CampoMedida(id: 'altura', label: 'Altura (H)', unidade: 'mm', hint: 'ex: 150'),
+      CampoMedida(id: 'mesa', label: 'Largura Mesa (B)', unidade: 'mm', hint: 'ex: 150'),
+      CampoMedida(id: 'alma', label: 'Esp. Alma (tw)', unidade: 'mm', hint: 'ex: 7'),
+      CampoMedida(id: 'mesa_esp', label: 'Esp. Mesa (tf)', unidade: 'mm', hint: 'ex: 10'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento', unidade: 'm', hint: 'ex: 9'),
+    ],
+  ),
+  PerfilMetal(
+    id: 'perfil_u',
+    nome: 'Perfil U (UPN)',
+    categoria: 'Estrutural',
+    descricao: 'Perfil U / Canal para estruturas',
+    icone: 'U',
+    campos: [
+      CampoMedida(id: 'altura', label: 'Altura (H)', unidade: 'mm', hint: 'ex: 100'),
+      CampoMedida(id: 'mesa', label: 'Largura Mesa (B)', unidade: 'mm', hint: 'ex: 50'),
+      CampoMedida(id: 'alma', label: 'Esp. Alma (tw)', unidade: 'mm', hint: 'ex: 6'),
+      CampoMedida(id: 'mesa_esp', label: 'Esp. Mesa (tf)', unidade: 'mm', hint: 'ex: 8.5'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento', unidade: 'm', hint: 'ex: 6'),
+    ],
+  ),
+  PerfilMetal(
+    id: 'perfil_c',
+    nome: 'Perfil C (Calha)',
+    categoria: 'Estrutural',
+    descricao: 'Perfil C dobrado para estruturas leves',
+    icone: 'C',
+    campos: [
+      CampoMedida(id: 'altura', label: 'Altura (H)', unidade: 'mm', hint: 'ex: 100'),
+      CampoMedida(id: 'mesa', label: 'Largura Mesa (B)', unidade: 'mm', hint: 'ex: 40'),
+      CampoMedida(id: 'aba', label: 'Aba (a)', unidade: 'mm', hint: 'ex: 15'),
+      CampoMedida(id: 'espessura', label: 'Espessura (e)', unidade: 'mm', hint: 'ex: 2.65'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento', unidade: 'm', hint: 'ex: 6'),
+    ],
+  ),
+  PerfilMetal(
+    id: 'perfil_z',
+    nome: 'Perfil Z',
+    categoria: 'Estrutural',
+    descricao: 'Perfil Z para terças e estruturas',
+    icone: 'Z',
+    campos: [
+      CampoMedida(id: 'altura', label: 'Altura (H)', unidade: 'mm', hint: 'ex: 150'),
+      CampoMedida(id: 'mesa', label: 'Largura Mesa (B)', unidade: 'mm', hint: 'ex: 60'),
+      CampoMedida(id: 'espessura', label: 'Espessura (e)', unidade: 'mm', hint: 'ex: 3'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento', unidade: 'm', hint: 'ex: 6'),
+    ],
+  ),
+  PerfilMetal(
+    id: 'perfil_t',
+    nome: 'Perfil T',
+    categoria: 'Estrutural',
+    descricao: 'Perfil T para estruturas e suportes',
+    icone: 'T',
+    campos: [
+      CampoMedida(id: 'altura', label: 'Altura (H)', unidade: 'mm', hint: 'ex: 80'),
+      CampoMedida(id: 'mesa', label: 'Largura Mesa (B)', unidade: 'mm', hint: 'ex: 80'),
+      CampoMedida(id: 'alma', label: 'Esp. Alma (tw)', unidade: 'mm', hint: 'ex: 7'),
+      CampoMedida(id: 'mesa_esp', label: 'Esp. Mesa (tf)', unidade: 'mm', hint: 'ex: 11'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento', unidade: 'm', hint: 'ex: 6'),
+    ],
+  ),
+  // ── Tubos ──────────────────────────────────────────────────────────────────
+  PerfilMetal(
+    id: 'tubo_retangular',
+    nome: 'Tubo Retangular',
+    categoria: 'Tubo',
+    descricao: 'Tubo de seção retangular (metalon)',
+    icone: '▭',
+    campos: [
+      CampoMedida(id: 'largura', label: 'Largura (A)', unidade: 'mm', hint: 'ex: 80'),
+      CampoMedida(id: 'altura', label: 'Altura (B)', unidade: 'mm', hint: 'ex: 40'),
+      CampoMedida(id: 'espessura', label: 'Espessura (e)', unidade: 'mm', hint: 'ex: 2'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento', unidade: 'm', hint: 'ex: 6'),
+    ],
+  ),
+  PerfilMetal(
+    id: 'tubo_quadrado',
+    nome: 'Tubo Quadrado',
+    categoria: 'Tubo',
+    descricao: 'Tubo de seção quadrada (metalon)',
+    icone: '□',
+    campos: [
+      CampoMedida(id: 'lado', label: 'Lado (A)', unidade: 'mm', hint: 'ex: 50'),
+      CampoMedida(id: 'espessura', label: 'Espessura (e)', unidade: 'mm', hint: 'ex: 2'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento', unidade: 'm', hint: 'ex: 6'),
+    ],
+  ),
+  PerfilMetal(
+    id: 'tubo_redondo',
+    nome: 'Tubo Redondo',
+    categoria: 'Tubo',
+    descricao: 'Tubo de seção circular',
+    icone: '○',
+    campos: [
+      CampoMedida(id: 'diametro_ext', label: 'Diâmetro Ext. (De)', unidade: 'mm', hint: 'ex: 60.3'),
+      CampoMedida(id: 'espessura', label: 'Espessura (e)', unidade: 'mm', hint: 'ex: 3.2'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento', unidade: 'm', hint: 'ex: 6'),
+    ],
+  ),
+  // ── Barras ─────────────────────────────────────────────────────────────────
+  PerfilMetal(
+    id: 'barra_redonda',
+    nome: 'Barra Redonda',
+    categoria: 'Barra',
+    descricao: 'Barra maciça de seção circular',
+    icone: '●',
+    campos: [
+      CampoMedida(id: 'diametro', label: 'Diâmetro (D)', unidade: 'mm', hint: 'ex: 25'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento', unidade: 'm', hint: 'ex: 6'),
+    ],
+  ),
+  PerfilMetal(
+    id: 'barra_quadrada',
+    nome: 'Barra Quadrada',
+    categoria: 'Barra',
+    descricao: 'Barra maciça de seção quadrada',
+    icone: '■',
+    campos: [
+      CampoMedida(id: 'lado', label: 'Lado (A)', unidade: 'mm', hint: 'ex: 25'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento', unidade: 'm', hint: 'ex: 6'),
+    ],
+  ),
+  PerfilMetal(
+    id: 'barra_chata',
+    nome: 'Barra Chata',
+    categoria: 'Barra',
+    descricao: 'Barra maciça de seção retangular',
+    icone: '▬',
+    campos: [
+      CampoMedida(id: 'largura', label: 'Largura (A)', unidade: 'mm', hint: 'ex: 50'),
+      CampoMedida(id: 'espessura', label: 'Espessura (e)', unidade: 'mm', hint: 'ex: 6'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento', unidade: 'm', hint: 'ex: 6'),
+    ],
+  ),
+  PerfilMetal(
+    id: 'barra_sextavada',
+    nome: 'Barra Sextavada',
+    categoria: 'Barra',
+    descricao: 'Barra maciça de seção hexagonal',
+    icone: '⬡',
+    campos: [
+      CampoMedida(id: 'chaveta', label: 'Chaveta (s)', unidade: 'mm', hint: 'ex: 27'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento', unidade: 'm', hint: 'ex: 3'),
+    ],
+  ),
+  // ── Chapas ─────────────────────────────────────────────────────────────────
+  PerfilMetal(
+    id: 'chapa',
+    nome: 'Chapa',
+    categoria: 'Chapa',
+    descricao: 'Chapa plana (corte e dobra)',
+    icone: '▪',
+    campos: [
+      CampoMedida(id: 'largura', label: 'Largura (A)', unidade: 'mm', hint: 'ex: 1000'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento (B)', unidade: 'mm', hint: 'ex: 2000'),
+      CampoMedida(id: 'espessura', label: 'Espessura (e)', unidade: 'mm', hint: 'ex: 3'),
+    ],
+  ),
+  PerfilMetal(
+    id: 'chapa_xadrez',
+    nome: 'Chapa Xadrez',
+    categoria: 'Chapa',
+    descricao: 'Chapa com relevo antiderrapante',
+    icone: '▪',
+    campos: [
+      CampoMedida(id: 'largura', label: 'Largura (A)', unidade: 'mm', hint: 'ex: 1000'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento (B)', unidade: 'mm', hint: 'ex: 2000'),
+      CampoMedida(id: 'espessura', label: 'Espessura nominal (e)', unidade: 'mm', hint: 'ex: 3'),
+    ],
+  ),
+  // ── Outros ─────────────────────────────────────────────────────────────────
+  PerfilMetal(
+    id: 'vergalhao',
+    nome: 'Vergalhão CA-50',
+    categoria: 'Outros',
+    descricao: 'Vergalhão nervurado para concreto armado',
+    icone: '≈',
+    campos: [
+      CampoMedida(id: 'diametro', label: 'Diâmetro (Ø)', unidade: 'mm', hint: 'ex: 12.5'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento', unidade: 'm', hint: 'ex: 12'),
+    ],
+  ),
+  PerfilMetal(
+    id: 'tela_soldada',
+    nome: 'Tela Soldada',
+    categoria: 'Outros',
+    descricao: 'Tela de aço soldada eletronicamente',
+    icone: '#',
+    campos: [
+      CampoMedida(id: 'largura', label: 'Largura (A)', unidade: 'm', hint: 'ex: 2.45'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento (B)', unidade: 'm', hint: 'ex: 6'),
+      CampoMedida(id: 'diametro', label: 'Diâmetro fio (Ø)', unidade: 'mm', hint: 'ex: 5'),
+      CampoMedida(id: 'espacamento', label: 'Espaçamento', unidade: 'mm', hint: 'ex: 150'),
+    ],
+  ),
+  PerfilMetal(
+    id: 'angulo_dobrado',
+    nome: 'Ângulo Dobrado',
+    categoria: 'Estrutural',
+    descricao: 'Chapa dobrada em ângulo reto',
+    icone: 'L',
+    campos: [
+      CampoMedida(id: 'aba_a', label: 'Aba A', unidade: 'mm', hint: 'ex: 100'),
+      CampoMedida(id: 'aba_b', label: 'Aba B', unidade: 'mm', hint: 'ex: 100'),
+      CampoMedida(id: 'espessura', label: 'Espessura (e)', unidade: 'mm', hint: 'ex: 4'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento', unidade: 'm', hint: 'ex: 3'),
+    ],
+  ),
+  PerfilMetal(
+    id: 'tubo_oval',
+    nome: 'Tubo Oval',
+    categoria: 'Tubo',
+    descricao: 'Tubo de seção elíptica',
+    icone: '⬭',
+    campos: [
+      CampoMedida(id: 'eixo_maior', label: 'Eixo Maior (A)', unidade: 'mm', hint: 'ex: 60'),
+      CampoMedida(id: 'eixo_menor', label: 'Eixo Menor (B)', unidade: 'mm', hint: 'ex: 30'),
+      CampoMedida(id: 'espessura', label: 'Espessura (e)', unidade: 'mm', hint: 'ex: 2'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento', unidade: 'm', hint: 'ex: 6'),
+    ],
+  ),
+  PerfilMetal(
+    id: 'trilho',
+    nome: 'Trilho Ferroviário',
+    categoria: 'Outros',
+    descricao: 'Trilho para pontes rolantes e transportadores',
+    icone: '⊥',
+    campos: [
+      CampoMedida(id: 'altura', label: 'Altura (H)', unidade: 'mm', hint: 'ex: 120'),
+      CampoMedida(id: 'cabeca', label: 'Largura Cabeça', unidade: 'mm', hint: 'ex: 60'),
+      CampoMedida(id: 'base', label: 'Largura Base', unidade: 'mm', hint: 'ex: 100'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento', unidade: 'm', hint: 'ex: 12'),
+    ],
+  ),
+  PerfilMetal(
+    id: 'omega',
+    nome: 'Perfil Ômega (Ω)',
+    categoria: 'Estrutural',
+    descricao: 'Perfil ômega para fixação e estruturas leves',
+    icone: 'Ω',
+    campos: [
+      CampoMedida(id: 'altura', label: 'Altura (H)', unidade: 'mm', hint: 'ex: 40'),
+      CampoMedida(id: 'mesa', label: 'Largura Mesa (B)', unidade: 'mm', hint: 'ex: 60'),
+      CampoMedida(id: 'aba', label: 'Aba (a)', unidade: 'mm', hint: 'ex: 20'),
+      CampoMedida(id: 'espessura', label: 'Espessura (e)', unidade: 'mm', hint: 'ex: 2'),
+      CampoMedida(id: 'comprimento', label: 'Comprimento', unidade: 'm', hint: 'ex: 6'),
+    ],
+  ),
+];
+
+List<String> get categorias => perfis.map((p) => p.categoria).toSet().toList()..sort();
+
+List<PerfilMetal> perfisPorCategoria(String categoria) =>
+    perfis.where((p) => p.categoria == categoria).toList();
