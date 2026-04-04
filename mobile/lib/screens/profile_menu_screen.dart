@@ -142,20 +142,20 @@ class _Header extends StatelessWidget {
                     width: 36,
                     height: 36,
                     decoration: BoxDecoration(
-                      color: AppColors.orange,
-                      borderRadius: BorderRadius.circular(9),
+                      color: Colors.white.withValues(alpha: 0.15),
+                      shape: BoxShape.circle,
                     ),
                     child: const Center(
-                      child: Text('MC',
+                      child: Text('M',
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: 13,
+                              fontSize: 16,
                               fontWeight: FontWeight.w900)),
                     ),
                   ),
                   const SizedBox(width: 10),
                   const Text(
-                    'MetalCalc Pro',
+                    'MontarCalcPro',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,

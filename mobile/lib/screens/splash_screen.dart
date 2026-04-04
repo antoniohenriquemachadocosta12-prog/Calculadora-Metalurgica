@@ -77,11 +77,11 @@ class _SplashScreenState extends State<SplashScreen>
                       width: 100,
                       height: 100,
                       decoration: BoxDecoration(
-                        color: AppColors.orange,
-                        borderRadius: BorderRadius.circular(24),
+                        color: AppColors.navyLight,
+                        shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.orange.withOpacity(0.4),
+                            color: AppColors.navy.withOpacity(0.5),
                             blurRadius: 24,
                             offset: const Offset(0, 8),
                           ),
@@ -89,19 +89,18 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                       child: const Center(
                         child: Text(
-                          'MC',
+                          'M',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 36,
+                            fontSize: 42,
                             fontWeight: FontWeight.w900,
-                            letterSpacing: 2,
                           ),
                         ),
                       ),
                     ),
                     const SizedBox(height: 24),
                     const Text(
-                      'MetalCalc Pro',
+                      'MontarCalcPro',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 32,
