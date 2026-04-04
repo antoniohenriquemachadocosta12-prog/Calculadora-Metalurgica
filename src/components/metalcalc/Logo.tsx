@@ -34,24 +34,24 @@ export const Logo: React.FC<LogoProps> = ({ size = 'md', onClick, className = ''
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          {/* Stylized "M" with two curved orange shapes */}
+          {/* Stylized "M" */}
           <path
             d="M25 75 C25 45, 35 25, 50 25 C45 35, 42 50, 42 75"
-            stroke="#E8863A"
+            stroke="#FFFFFF"
             strokeWidth="8"
             strokeLinecap="round"
             fill="none"
           />
           <path
             d="M50 25 C65 25, 75 45, 75 75"
-            stroke="#E8863A"
+            stroke="#FFFFFF"
             strokeWidth="8"
             strokeLinecap="round"
             fill="none"
           />
           <path
             d="M58 75 C58 50, 55 35, 50 25"
-            stroke="#E8863A"
+            stroke="#FFFFFF"
             strokeWidth="8"
             strokeLinecap="round"
             fill="none"
